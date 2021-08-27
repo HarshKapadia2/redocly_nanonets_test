@@ -1,0 +1,443 @@
+openapi: 3.1.0
+info:
+    title: NanoNets
+    description: NanoNets' API Reference.
+    contact:
+        name: NanoNets Support
+        url: https://nanonets.com
+        email: support@nanonets.com
+    license:
+        name: MIT
+        url: https://mit-license.org
+    version: 2.0.0
+    x-logo:
+        url: https://nanonets.com/logo2.png
+        altText: NanoNets
+servers:
+    url: https://app.nanonets.com/api/v2
+    description:
+paths:
+    /OCR/Model/{model_id}/UploadUrls/:
+        post:
+            tags:
+                - Optical Character Recognition Upload
+            summary: Upload training images by URL
+            description: >
+                You can use this endpoint to upload training images for a category (for the specified model) by image urls.
+                You can upload multiple images in the same request by adding an array of urls. You will receive model information
+                along with total number of images per category on successful execution.
+            operationId: ocr/upload/post/url
+            parameters:
+                - name: Content-Type
+                  in: header
+                  description: |
+                      Set the ['Content-Type' header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type) value.
+                      Eg: `Content-Type: "application/json"`
+                  required: true
+                  schema:
+                      type: string
+                - name: model_id
+                  in: path
+                  description: |
+                      The ID of the model to which the images have to be uploaded. Can be found in the model settings.
+                      Eg: `0a0aa000-0000-0a0-aa00-000a0000000a`
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                description: The parameters to be sent in the request's body.
+                content:
+                    application/json:
+                        schema:
+                            required:
+                                - urls
+                                - filename
+                            properties:
+                                urls:
+                                    type: array
+                                    items:
+                                        type: string
+                                    description: URLs of the training images
+                                    nullable: false
+                                filename:
+                                    type: array
+                                    items:
+                                        type: string
+                                    description: File names of the uploaded URLs **in order**.
+                                    nullable: false
+                required: true
+            responses:
+                "200":
+                    description: Request successful.
+                    content:
+                        schema:
+                        examples:
+                            application/json:
+                                Meta:
+                                    ModelID: 00000000-0000-0000-0000-000000000000
+                                    ModelType: ocr
+                                    State: 0
+                                    Categories:
+                                        - name: category1
+                                          count: 0
+                                        - name: category2
+                                          count: 0
+                                    Accuracy: 0
+                                    Status: Current Status
+                                Data:
+                                    - filename: example.jpeg
+                                      size:
+                                          width: 1024
+                                          height: 1024
+                                      object:
+                                          - name: category1
+                                            ocr_text: text inside the bounding box
+                                            bndbox:
+                                                xmin: 1
+                                                ymin: 1
+                                                xmax: 100
+                                                ymax: 100
+                                      id: 00000000-0000-0000-0000-000000000000
+                    x-summary: OK
+                "202":
+                    description: |
+                        Request partially successful. One or more URLs might not be correct or got no response.
+                    x-summary: ACCEPTED, partially successful
+                "400":
+                    description: |
+                        - Category not valid for model. Check if this model has the category used in the request.
+                        - URLs missing. Check if you have included an array of image URLs.
+                    x-summary: BAD REQUEST
+                "404":
+                    description: Model does not exist. Check if the model ID exists.
+                    x-summary: NOT FOUND
+            deprecated: false
+            x-codeSamples:
+                - lang: JavaScript
+                  label: Node.js
+                  source: >
+                      var request = require('request')
+
+                      const form_data = {"data": [{"filename":"https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg", "object": [{"name":"category1", "ocr_text":"text inside the bounding box", "bndbox": {"xmin": 1,"ymin": 1,"xmax": 100, "ymax": 100}}, {"name":"category2", "bndbox": {"xmin": 1,"ymin": 1,"xmax": 100, "ymax": 100}}]}], "urls": ["https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg"]}
+
+                      const options = {
+                          url : 'https://app.nanonets.com/api/v2/OCR/Model/{model_id}/UploadUrls/',
+                          body: JSON.stringify(form_data),
+                          headers: {
+                              'Authorization' : 'Basic ' + Buffer.from('[[.ApiKey]]' + ':').toString('base64'),
+                              'Content-Type': "application/json"
+                          }
+                      }
+
+                      request.post(options, function(err, httpResponse, body) {
+
+                        console.log(body)
+                      });
+                - lang: Python
+                  label: Python
+                  source: |
+                      import requests
+
+                      url = "https://app.nanonets.com/api/v2/OCR/Model/{model_id}/UploadUrls/"
+
+                      payload = "{\"data\": [{\"filename\":\"https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg\", \"object\": [{\"name\":\"category1\", \"ocr_text\":\"text inside the bounding box\", \"bndbox\": {\"xmin\": 1,\"ymin\": 1,\"xmax\": 100, \"ymax\": 100}}, {\"name\":\"category2\", \"bndbox\": {\"xmin\": 1,\"ymin\": 1,\"xmax\": 100, \"ymax\": 100}}]}], \"urls\": [\"https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg\"]}"
+                      headers = {
+                          'Content-Type': "application/json"
+                      }
+
+                      response = requests.request("POST", url, auth=requests.auth.HTTPBasicAuth('[[.ApiKey]]', ''), data=payload, headers=headers)
+
+                      print(response.text)
+                - lang: Shell
+                  label: CLI
+                  source: |
+                      curl --request POST \
+                          --url https://app.nanonets.com/api/v2/OCR/Model/{model_id}/UploadUrls/ \
+                          -u '[[.ApiKey]]' \
+                          -H 'Content-Type: application/json' \
+                          --data '{"data": [{"filename":"https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg", "object": [{"name":"category1", "ocr_text":"text inside the bounding box", "bndbox": {"xmin": 1,"ymin": 1,"xmax": 100, "ymax": 100}}, {"name":"category2", "bndbox": {"xmin": 1,"ymin": 1,"xmax": 100, "ymax": 100}}]}], "urls": ["https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg"]}'
+                - lang: Go
+                  label: Go
+                  source: |
+                      package main
+
+                      import (
+                          "fmt"
+                          "io/ioutil"
+                          "net/http"
+                          "strings"
+                      )
+
+                      func main() {
+
+                          url := "https://app.nanonets.com/api/v2/OCR/Model/REPLACE_MODEL_ID/UploadUrls/"
+
+                          payload := strings.NewReader("{\"data\": [{\"filename\":\"https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg\", \"object\": [{\"name\":\"category1\", \"ocr_text\":\"text inside the bounding box\", \"bndbox\": {\"xmin\": 1,\"ymin\": 1,\"xmax\": 100, \"ymax\": 100}}, {\"name\":\"category2\", \"bndbox\": {\"xmin\": 1,\"ymin\": 1,\"xmax\": 100, \"ymax\": 100}}]}], \"urls\": [\"https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg\"]}")
+
+                          req, _ := http.NewRequest("POST", url, payload)
+
+                          req.Header.Add("Content-Type", "application/json")
+                          req.SetBasicAuth("[[.ApiKey]]", "")
+
+                          res, _ := http.DefaultClient.Do(req)
+
+                          defer res.Body.Close()
+                          body, _ := ioutil.ReadAll(res.Body)
+
+                          fmt.Println(res)
+                          fmt.Println(string(body))
+
+                      }
+                - lang: JavaScript
+                  label: JavaScript
+                  source: >-
+                      var data = JSON.stringify({
+                        "data": [
+                          {
+                            "filename": "https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg",
+                            "object": [
+                              {
+                                "name": "category1",
+                                "bndbox": {
+                                  "xmin": 1,
+                                  "ymin": 1,
+                                  "xmax": 100,
+                                  "ymax": 100
+                                },
+                                "ocr_text" : "text inside the bounding box",
+                              },
+                              {
+                                "name": "category2",
+                                "bndbox": {
+                                  "xmin": 1,
+                                  "ymin": 1,
+                                  "xmax": 100,
+                                  "ymax": 100
+                                },
+                                "ocr_text" : "text inside the bounding box",
+                              }
+                            ]
+                          }
+                        ],
+                        "urls": [
+                          "https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg"
+                        ]
+                      });
+
+
+                      var xhr = new XMLHttpRequest();
+
+                      xhr.withCredentials = true;
+
+
+                      xhr.addEventListener("readystatechange", function () {
+                        if (this.readyState === 4) {
+                          console.log(this.responseText);
+                        }
+                      });
+
+
+                      xhr.open("POST", "https://app.nanonets.com/api/v2/OCR/Model/REPLACE_MODEL_ID/UploadUrls/");
+
+                      xhr.setRequestHeader("Content-Type", "application/json");
+
+                      xhr.setRequestHeader("authorization", "Basic " + btoa("[[.ApiKey]]:"));
+
+
+                      xhr.send(data);
+                - lang: Ruby
+                  label: Ruby
+                  source: |
+                      require 'uri'
+                      require 'net/http'
+
+                      url = URI("https://app.nanonets.com/api/v2/OCR/Model/REPLACE_MODEL_ID/UploadUrls/")
+
+                      http = Net::HTTP.new(url.host, url.port)
+                      http.use_ssl = true
+
+                      request = Net::HTTP::Post.new(url)
+                      request["Content-Type"] = 'application/json'
+                      request.basic_auth '[[.ApiKey]]', ''
+                      request.body = "{\"data\": [{\"filename\":\"https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg\", \"object\": [{\"name\":\"category1\", \"ocr_text\":\"text inside the bounding box\", \"bndbox\": {\"xmin\": 1,\"ymin\": 1,\"xmax\": 100, \"ymax\": 100}}, {\"name\":\"category2\", \"bndbox\": {\"xmin\": 1,\"ymin\": 1,\"xmax\": 100, \"ymax\": 100}}]}], \"urls\": [\"https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg\"]}"
+
+                      response = http.request(request)
+                      puts response.read_body"
+                - lang: C#
+                  label: C#
+                  source: >
+                      var client = new
+                      RestClient("https://app.nanonets.com/api/v2/OCR/Model/REPLACE_MODEL_ID/UploadUrls/");
+
+                      var request = new RestRequest(Method.POST);
+
+                      request.AddHeader("authorization", "Basic [[.ApiKey]]");
+
+                      request.AddHeader("Content-Type", "application/json");
+
+                      request.AddParameter("undefined", "
+                      {"data": [{"filename":"https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg", "object":
+                      [{"name":"category1", "ocr_text": "text inside the bounding box", "bndbox": {"xmin": 1,"ymin":
+                      1,"xmax": 100, "ymax": 100}}, {"name":"category2", "ocr_text": "text inside the bounding box",
+                      "bndbox": {"xmin": 1,"ymin": 1,"xmax": 100, "ymax":
+                      100}}]}], "urls": ["https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg"]}",
+                      ParameterType.RequestBody);
+
+                      IRestResponse response = client.Execute(request);
+                - lang: Java
+                  label: Java
+                  source: >-
+                      OkHttpClient client = new OkHttpClient();
+
+
+                      MediaType mediaType =
+                      MediaType.parse("application/json");
+
+                      RequestBody body = RequestBody.create(mediaType, "
+
+                      {"data": [{"filename":"https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg", "object":
+                      [{"name":"category1", "ocr_text": "text inside the bounding box", "bndbox": {"xmin": 1,"ymin":
+                      1,"xmax": 100, "ymax": 100}}, {"name":"category2", "ocr_text": "text inside the bounding box",
+                      "bndbox": {"xmin": 1,"ymin": 1,"xmax": 100, "ymax":
+                      100}}]}], "urls": ["https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg"]}");
+
+                      Request request = new Request.Builder()
+                        .url("https://app.nanonets.com/api/v2/OCR/Model/REPLACE_MODEL_ID/UploadUrls/")
+                        .post(body)
+                        .addHeader("Content-Type", "application/json")
+                        .addHeader("Authorization", Credentials.basic("[[.ApiKey]]", ""))
+                        .build();
+
+                      Response response = client.newCall(request).execute();
+components:
+    securitySchemes:
+        api_key:
+            type: http
+            description: >
+                When you sign up for an account, you are given your first API key.
+                To do so please [follow this link.](https://app.nanonets.com/#keys)
+
+
+                Also you can generate additional API keys, and delete API keys (as you may need to rotate your keys in the future).
+                NanoNets expects for the API key to be included in all API requests to the server in a header that looks like the following:
+
+
+                <span style="color:red">Authorization: [[.ApiKey]]</span>
+
+
+                All API requests must be made over HTTPS. Calls made over plain HTTP will fail. API requests without authentication will also fail.
+            scheme: Basic
+security:
+    api_key: []
+tags:
+    - name: Optical Character Recognition Upload
+      description:
+      x-displayName: Upload
+    - name: Optical Character Recognition Train
+      description:
+      x-displayName: Train
+    - name: Optical Character Recognition Predict
+      description:
+      x-displayName: Predict
+    - name: Image Classification Upload
+      description:
+      x-displayName: Upload
+    - name: Image Classification Train
+      description:
+      x-displayName: Train
+    - name: Image Classification Predict
+      description:
+      x-displayName: Predict
+    - name: Object Detection Upload
+      description:
+      x-displayName: Upload
+    - name: Object Detection Train
+      description:
+      x-displayName: Train
+    - name: Object Detection Predict
+      description:
+      x-displayName: Predict
+    - name: Multi Label Image Classification Upload
+      description:
+      x-displayName: Upload
+    - name: Multi Label Image Classification Train
+      description:
+      x-displayName: Train
+    - name: Multi Label Image Classification Predict
+      description:
+      x-displayName: Predict
+x-tagGroups:
+    - name: Optical Character Recognition
+      tags:
+          - Optical Character Recognition Upload
+          - Optical Character Recognition Train
+          - Optical Character Recognition Predict
+    - name: Image Classification
+      tags:
+          - Image Classification Upload
+          - Image Classification Train
+          - Image Classification Predict
+    - name: Object Detection
+      tags:
+          - Object Detection Upload
+          - Object Detection Train
+          - Object Detection Predict
+    - name: Multi Label Image Classification
+      tags:
+          - Multi Label Image Classification Upload
+          - Multi Label Image Classification Train
+          - Multi Label Image Classification Predict
+# path:
+#     path_name:
+#         post:
+#             tags:
+#                 - tag_name
+#             summary:
+#             description:
+#             operationId:
+#             parameters:
+#                 - name:
+#                       in:
+#                       description:
+#                       required:
+#                       schema:
+#                           type:
+#                           items: # Used in arrays to indicate type of items in array
+#                               type:
+#                           format:
+#                           description:
+#                           pattern:
+#                           minimum:
+#                           maximum:
+#                           default:
+#                           enum:
+#                           nullable:
+#             requestBody:
+#                 description:
+#                 content:
+#                     mime_type:
+#                         schema:
+#                             type:
+#                             items: # Used in arrays to indicate type of items in array
+#                                 type:
+#                             required:
+#                                 - property_name
+#                             properties:
+#                                 property_name:
+#                                     type:
+#                                     items: # Used in arrays to indicate type of items in array
+#                                         type:
+#                                     format:
+#                                     description:
+#                                     pattern:
+#                                     minimum:
+#                                     maximum:
+#                                     default:
+#                                     enum:
+#                                     nullable:
+#                         examples:
+#                         encoding:
+#                 required:
+#             responses:
+#             deprecated:
+#             security:
