@@ -1,0 +1,88 @@
+path:
+    path_name:
+        post:
+            tags:
+                - tag_name
+            summary:
+            description:
+            operationId:
+            parameters:
+                - name:
+                      in:
+                      description:
+                      required:
+                      schema:
+                          type:
+                          additional_properties: # 'items' used in arrays to indicate type of items in array, 'maxItems'
+                              type:
+                          format:
+                          description:
+                          pattern:
+                          minimum:
+                          maximum:
+                          default:
+                          enum:
+                          nullable:
+            requestBody:
+                description:
+                content:
+                    mime_type:
+                        schema:
+                            type:
+                            additional_properties: # 'items' used in arrays to indicate type of items in array, 'maxItems'
+                                type:
+                            required:
+                                - property_name
+                            properties:
+                                property_name:
+                                    type:
+                                    additional_properties: # 'items' used in arrays to indicate type of items in array, 'maxItems'
+                                        type:
+                                    format:
+                                    description:
+                                    pattern:
+                                    minimum:
+                                    maximum:
+                                    default:
+                                    enum:
+                        examples:
+                            example_name:
+                                summary:
+                                description:
+                                value:
+                                externalValue:
+                        encoding:
+                required:
+            responses:
+                "HTTP_status_code":
+                    description:
+                    content:
+                        mime_type:
+                            schema:
+                                type:
+                                additional_properties: # 'items' used in arrays to indicate type of items in array, 'maxItems'
+                                    type:
+                                required:
+                                    - property_name
+                                properties:
+                                    property_name:
+                                        type:
+                                        additional_properties: # 'items' used in arrays to indicate type of items in array, 'maxItems'
+                                            type:
+                                        format:
+                                        description:
+                                        pattern:
+                                        minimum:
+                                        maximum:
+                                        default:
+                                        enum:
+                            examples:
+                                example_name:
+                                    summary:
+                                    description:
+                                    value:
+                                    externalValue:
+                            encoding:
+                    x-summary:
+            deprecated:
+            security:
