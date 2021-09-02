@@ -52,6 +52,10 @@ path:
                                 value:
                                 externalValue:
                         encoding:
+                            property_name:
+                                contentType:
+                                headers:
+                                allowReserved:
                 required:
             responses:
                 "HTTP_status_code":

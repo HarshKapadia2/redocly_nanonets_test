@@ -73,59 +73,28 @@ paths:
                                     type: array
                                     items:
                                         type: string
-                                    description: URLs of the training images
+                                    description: |
+                                        Array of URL(s) of the training file(s).
+                                        Accepted file formats: PNG, JPEG, PDF
                 required: true
             responses:
                 "200":
-                    description: Request successful.
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                            examples:
-                                OK:
-                                    summary: Request successful
-                                    description: >
-                                        200 OK: Request successful
-                                    value:
-                                        Meta:
-                                            ModelID: 00000000-0000-0000-0000-000000000000
-                                            ModelType: ocr
-                                            State: 0
-                                            Categories:
-                                                - name: category1
-                                                  count: 0
-                                                - name: category2
-                                                  count: 0
-                                            Accuracy: 0
-                                            Status: Current Status
-                                        Data:
-                                            - filename: example.jpeg
-                                              size:
-                                                  width: 1024
-                                                  height: 1024
-                                              object:
-                                                  - name: category1
-                                                    ocr_text: text inside the bounding box
-                                                    bndbox:
-                                                        xmin: 1
-                                                        ymin: 1
-                                                        xmax: 100
-                                                        ymax: 100
-                                              id: 00000000-0000-0000-0000-000000000000
-                    x-summary: OK
+                    $ref: "#/components/responses/OK"
                 "202":
                     description: |
-                        Request partially successful. One or more URLs might not be correct or got no response.
-                    x-summary: ACCEPTED, partially successful
+                        Request partially successful.
+                        <br />
+                        <br />
+                        One or more URLs
+                        - Might not be correct
+                        - Might be of the wrong file format
+                        - Got no response
+                    x-summary: ACCEPTED (Partially successful)
                 "400":
-                    description: |
-                        - Category not valid for model. Check if this model has the category used in the request.
-                        - URLs missing. Check if you have included an array of image URLs.
+                    description: URL(s) missing. Check if an array of file URLs has been included in the request.
                     x-summary: BAD REQUEST
                 "404":
-                    description: Model does not exist. Check if the model ID exists.
-                    x-summary: NOT FOUND
+                    $ref: "#/components/responses/NOT FOUND"
             deprecated: false
             x-codeSamples:
                 - lang: JavaScript
@@ -203,63 +172,6 @@ paths:
                           fmt.Println(string(body))
 
                       }
-                - lang: JavaScript
-                  label: JavaScript
-                  source: >-
-                      var data = JSON.stringify({
-                        "data": [
-                          {
-                            "filename": "https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg",
-                            "object": [
-                              {
-                                "name": "category1",
-                                "bndbox": {
-                                  "xmin": 1,
-                                  "ymin": 1,
-                                  "xmax": 100,
-                                  "ymax": 100
-                                },
-                                "ocr_text" : "text inside the bounding box",
-                              },
-                              {
-                                "name": "category2",
-                                "bndbox": {
-                                  "xmin": 1,
-                                  "ymin": 1,
-                                  "xmax": 100,
-                                  "ymax": 100
-                                },
-                                "ocr_text" : "text inside the bounding box",
-                              }
-                            ]
-                          }
-                        ],
-                        "urls": [
-                          "https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg"
-                        ]
-                      });
-
-
-                      var xhr = new XMLHttpRequest();
-
-                      xhr.withCredentials = true;
-
-
-                      xhr.addEventListener("readystatechange", function () {
-                        if (this.readyState === 4) {
-                          console.log(this.responseText);
-                        }
-                      });
-
-
-                      xhr.open("POST", "https://app.nanonets.com/api/v2/OCR/Model/REPLACE_MODEL_ID/UploadUrls/");
-
-                      xhr.setRequestHeader("Content-Type", "application/json");
-
-                      xhr.setRequestHeader("authorization", "Basic " + btoa("[[.ApiKey]]:"));
-
-
-                      xhr.send(data);
                 - lang: Ruby
                   label: Ruby
                   source: |
@@ -324,7 +236,287 @@ paths:
                         .build();
 
                       Response response = client.newCall(request).execute();
+    /OCR/Model/{model_id}/UploadFile:
+        post:
+            tags:
+                - Optical Character Recognition Upload
+            summary: Upload Training Images by File
+            description: |
+                Upload a training image to the specified model using a locally stored file.
+                On successful upload, model information along with the total number of images per category will be received.
+                <br />
+                <br />
+                NOTE: Batch file uploads are not supported by this end point.
+            operationId: ocr/upload/file
+            parameters:
+                - $ref: "#/components/parameters/model_id"
+            requestBody:
+                description: |
+                    The parameters to be sent in the request's body.
+                    <br />
+                    <br />
+                    NOTE: Please [use `FormData` for JavaScript](https://developer.mozilla.org/en-US/docs/Web/API/FormData/FormData).
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - data
+                                - file
+                            properties:
+                                data:
+                                    type: string
+                                    description: |
+                                        The name of the file to be uploaded as a string **in the specified format**.
+                                        Format: `[{"filename": "filename.ext"}]`.
+                                        The `filename` must be the same as the uploaded file name.
+                                file:
+                                    type: string
+                                    format: binary
+                                    description: |
+                                        The file to be uploaded.
+                                        Accepted formats: PNG, JPEG, PDF
+                        encoding:
+                            file:
+                                contentType: image/png, image/jpeg, application/pdf
+                required: true
+            responses:
+                "200":
+                    $ref: "#/components/responses/OK"
+                "400":
+                    description: |
+                        - File missing. Check if the file has been included in the request.
+                        - Incorrect file type. Check if file you included is a valid PNG, JPEG or PDF file.
+                    x-summary: BAD REQUEST
+                "404":
+                    $ref: "#/components/responses/NOT FOUND"
+            deprecated: false
+            x-codeSamples:
+                - lang: JavaScript
+                  label: Node.js
+                  source: >
+                      var request = require('request')
+
+                      var fs = require('fs')
+
+                      const form_data = {'file' : fs.createReadStream('REPLACE_IMAGE_PATH.jpg'), 'data' : JSON.stringify([
+                        {"filename":"REPLACE_IMAGE_FILENAME.jpg", "object":[{"name":"category1", "ocr_text":"text inside the bounding box", "bndbox": {"xmin": 1,"ymin":1,"xmax": 100, "ymax": 100}}]}])}
+
+                      const options = {
+                          url : 'https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/UploadFile/',
+                          formData: form_data,
+                          headers: {
+                              'Authorization' : 'Basic ' + Buffer.from('[[.ApiKey]]' + ':').toString('base64')
+                          }
+                      }
+
+                      request.post(options, function(err, httpResponse, body) {
+
+                        console.log(body)
+                      });
+                - lang: Python
+                  label: Python
+                  source: >-
+                      import requests
+
+
+                      url = 'https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/UploadFile/'
+
+
+                      data = {'file' :open('REPLACE_IMAGE_PATH.jpg', 'rb'), 'data' :('',
+                      '[{"filename":"REPLACE_IMAGE_FILENAME.jpg", "object":
+                      [{"name":"category1", "ocr_text":"text inside the bounding box", "bndbox": {"xmin": 1,"ymin":
+                      1,"xmax": 100, "ymax": 100}}]}]')}
+
+
+                      response = requests.post(url, auth=requests.auth.HTTPBasicAuth('[[.ApiKey]]', ''), files=data)
+
+
+                      print(response.text)
+                - lang: Shell
+                  label: CLI
+                  source: |
+                      curl --request POST \
+                          --url 'https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/UploadFile/' \
+                          --header 'accept: multipart/form-data' \
+                          -u '[[.ApiKey]]' \
+                          -F 'data=[{"filename":"REPLACE_IMAGE_FILENAME.jpg", "object": [{"name":"category1", "ocr_text":"text inside the bounding box", "bndbox": {"xmin": 1,"ymin": 1,"xmax": 100, "ymax": 100}}]}]' \
+                          -F 'file=@REPLACE_IMAGE_PATH.jpg'
+                - lang: Go
+                  label: Go
+                  source: |
+                      package main
+
+                      import (
+                          "bytes"
+                          "fmt"
+                          "io"
+                          "io/ioutil"
+                          "mime/multipart"
+                          "net/http"
+                          "os"
+                          "path/filepath"
+                      )
+
+                      func main() {
+
+                          url := "https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/UploadFile/"
+
+                          file, err := os.Open("test.jpg")
+                          if err != nil {
+                              fmt.Println(err)
+                              return
+                          }
+
+                          defer file.Close()
+
+                          body := &bytes.Buffer{}
+                          writer := multipart.NewWriter(body)
+
+                          part, err := writer.CreateFormFile("file", filepath.Base("test.jpg"))
+                          if err != nil {
+                              fmt.Println(err)
+                              return
+                          }
+                          _, err = io.Copy(part, file)
+
+                          writer.WriteField("data", `[{"filename":"REPLACE_IMAGE_FILENAME.jpg", "object": [{"name":"category1", "ocr_text":"text inside the bounding box", "bndbox": {"xmin": 1,"ymin": 1,"xmax": 100, "ymax": 100}}]}]`)
+                          contentType := writer.FormDataContentType()
+
+                          err = writer.Close()
+                          if err != nil {
+                              fmt.Println(err)
+                              return
+                          }
+
+                          req, _ := http.NewRequest("POST", url, body)
+
+                          req.Header.Add("Content-Type", contentType)
+                          req.SetBasicAuth("[[.ApiKey]]", "")
+
+                          res, _ := http.DefaultClient.Do(req)
+
+                          defer res.Body.Close()
+                          outputBody, _ := ioutil.ReadAll(res.Body)
+
+                          fmt.Println(res)
+                          fmt.Println(string(outputBody))
+
+                      }
+                - lang: Ruby
+                  label: Ruby
+                  source: |
+                      require 'uri'
+                      require 'net/http'
+                      require 'net/http/post/multipart'
+
+                      url = URI('https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/UploadFile/')
+
+                      http = Net::HTTP.new(url.host, url.port)
+                      http.use_ssl = true
+
+                      File.open('REPLACE_IMAGE_PATH.jpg') do |jpg|
+                        request = Net::HTTP::Post::Multipart.new url.path,
+                            'file' => UploadIO.new(jpg, 'image/jpeg', 'REPLACE_IMAGE_PATH.jpg'),
+                            'data' => '[{"filename":"REPLACE_IMAGE_FILENAME.jpg", "object":[{"name":"category1", "ocr_text":"text inside the bounding box", "bndbox":{"xmin":1,"ymin":1,"xmax":100, "ymax":100}}]}]'
+                        request.basic_auth '[[.ApiKey]]', ''
+                        response = Net::HTTP.start(url.host, url.port) do |http|
+                            http.request(request)
+                        end
+                        puts response.read_body
+                      end
+                - lang: C#
+                  label: C#
+                  source: |
+                      var client = new RestClient("https://app.nanonets.com/api/v2/OCR/UploadFile/");
+                      var request = new RestRequest(Method.POST);
+                      request.AddHeader("authorization", "Basic [[.ApiKey]]");
+                      request.AddHeader("accept", "Multipart/form-data");
+                      request.AddParameter("data", "[{\"filename\":\"REPLACE_IMAGE_FILENAME.jpg\", \"object\": [{\"name\":\"category1\", \"ocr_text\":\"text inside the bounding box\", \"bndbox\": {\"xmin\": 1,\"ymin\": 1,\"xmax\": 100, \"ymax\": 100}}]}]");
+                      request.AddFile("file", "REPLACE_IMAGE_PATH.jpg");
+                      IRestResponse response = client.Execute(request);"
+                - lang: Java
+                  label: Java
+                  source: |
+                      private static final MediaType MEDIA_TYPE_JPG = MediaType.parse("image/jpeg");
+
+                      OkHttpClient client = new OkHttpClient();
+
+                      RequestBody requestBody = new MultipartBody.Builder()
+                              .setType(MultipartBody.FORM)
+                              .addFormDataPart("data", "[{\"filename\":\"REPLACE_IMAGE_FILENAME.jpg\", \"object\": [{\"name\":\"category1\", \"ocr_text\":\"text inside the bounding box\", \"bndbox\": {\"xmin\": 1,\"ymin\": 1,\"xmax\": 100, \"ymax\": 100}}]}]")
+                              .addFormDataPart("file", "REPLACE_IMAGE_PATH.jpg", RequestBody.create(MEDIA_TYPE_JPG, new File("REPLACE_IMAGE_PATH.jpg")))
+                              .build();
+
+                      request = new Request.Builder()
+                              .url("https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/UploadFile/")
+                              .post(requestBody)
+                              .addHeader("Authorization", Credentials.basic("[[.ApiKey]]", ""))
+                              .build();
+
+                      Response response = client.newCall(request).execute();"
 components:
+    responses:
+        OK:
+            description: Request successful.
+            content:
+                application/json:
+                    schema:
+                        type: object
+                    examples:
+                        OK:
+                            summary: Request successful
+                            description: >
+                                200 OK: Request successful
+                            value:
+                                Meta:
+                                    ModelID: 00000000-0000-0000-0000-000000000000
+                                    ModelType: ocr
+                                    State: 0
+                                    Categories:
+                                        - name: category1
+                                          count: 0
+                                        - name: category2
+                                          count: 0
+                                    Accuracy: 0
+                                    Status: Current Status
+                                Data:
+                                    - filename: example.jpeg
+                                      size:
+                                          width: 1024
+                                          height: 1024
+                                      object:
+                                          - name: category1
+                                            ocr_text: text inside the bounding box
+                                            bndbox:
+                                                xmin: 1
+                                                ymin: 1
+                                                xmax: 100
+                                                ymax: 100
+                                      id: 00000000-0000-0000-0000-000000000000
+            x-summary: OK
+        NOT FOUND:
+            description: Model does not exist. Check if the model ID is correct.
+            x-summary: NOT FOUND
+    parameters:
+        Content-Type:
+            name: Content-Type
+            in: header
+            description: |
+                Set the ['Content-Type' header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type) value.
+                Eg: `"Content-Type": "application/json"`
+            required: true
+            schema:
+                type: string
+        model_id:
+            name: model_id
+            in: path
+            description: |
+                The ID of the model on which the operation is to be performed. It can be found in the model settings.
+                Eg: `0a0aa000-0000-0a0-aa00-000a0000000a`
+            required: true
+            schema:
+                type: string
     securitySchemes:
         API Key:
             type: http
@@ -342,25 +534,6 @@ components:
 
                 All API requests must be made over HTTPS. Calls made over plain HTTP will fail. API requests without authentication will also fail.
             scheme: Basic
-    parameters:
-        Content-Type:
-            name: Content-Type
-            in: header
-            description: |
-                Set the ['Content-Type' header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type) value.
-                Eg: `Content-Type: "application/json"`
-            required: true
-            schema:
-                type: string
-        model_id:
-            name: model_id
-            in: path
-            description: |
-                The ID of the model on which the operation is to be performed. It can be found in the model settings.
-                Eg: `0a0aa000-0000-0a0-aa00-000a0000000a`
-            required: true
-            schema:
-                type: string
 security:
     - API Key: []
 tags:
