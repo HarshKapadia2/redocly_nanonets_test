@@ -455,6 +455,215 @@ paths:
                               .build();
 
                       Response response = client.newCall(request).execute();"
+    /OCR/Model/{model_id}/Train:
+        post:
+            tags:
+                - Optical Character Recognition Train
+            summary: Train Model
+            description: |
+                Train a model after uploading files to the model.
+                The same end point is to be used to re-train a model after uploading more files to improve the model.
+            operationId: ocr/train
+            parameters:
+                - $ref: "#/components/parameters/model_id"
+            responses:
+                "200":
+                    description: Request successful.
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                            examples:
+                                OK:
+                                    summary: Request successful
+                                    description: >
+                                        200 OK: Request successful
+                                    value:
+                                        model_id: 00000000-0000-0000-0000-000000000000
+                                        model_type: ocr
+                                        state: 0
+                                        categories:
+                                            - name: category1
+                                              count: 0
+                                            - name: category2
+                                              count: 0
+                    x-summary: OK
+                "400":
+                    description: Model not ready for training. Check if the files for the model are uploaded.
+                    x-summary: BAD REQUEST
+                "404":
+                    $ref: "#/components/responses/NOT FOUND"
+    /Inferences/Model/{model_id}/ImageLevelInferences:
+        get:
+            tags:
+                - Optical Character Recognition Predict
+            summary: Get All Prediction Files
+            description: Retrieve the files that have been processed by the prediction end points.
+            operationId: ocr/predict/getfile
+            parameters:
+                - $ref: "#/components/parameters/model_id"
+                - name: start_day_interval
+                  in: query
+                  description: TBD
+                  required: true
+                  schema:
+                      type: integer
+                - name: current_batch_day
+                  in: query
+                  description: TBD
+                  required: true
+                  schema:
+                      type: integer
+            responses:
+                "200":
+                    description: Image object.
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                            examples:
+                                OK:
+                                    summary: Request successful.
+                                    description: >
+                                        200 OK: Request successful
+                                    value:
+                                        moderated_images_count: 55
+                                        unmoderated_images_count: 156
+                                        moderated_images:
+                                            - model_id: category1
+                                              day_since_epoch: 18564
+                                              is_moderated: true
+                                              hour_of_day: 15
+                                              id: 00000000-0000-0000-0000-000000000000
+                                              url: uploadedfiles/00000000-0000-0000-0000-000000000000/PredictionImages/0000000001.jpeg
+                                              predicted_boxes:
+                                                  - label: invoice_id
+                                                    xmin: 616
+                                                    ymin: 321
+                                                    xmax: 984
+                                                    ymax: 357
+                                                    ocr_text: "877541"
+                                        unmoderated_images:
+                                            - model_id: 00000000-0000-0000-0000-000000000000
+                                              day_since_epoch: 18565
+                                              is_moderated: false
+                                              hour_of_day: 23
+                                              id: 00000000-0000-0000-0000-000000000000
+                                              url: uploadedfiles/00000000-0000-0000-0000-000000000000/PredictionImages/0000000002.jpeg
+                                              predicted_boxes:
+                                                  - label: seller_name
+                                                    xmin: 616
+                                                    ymin: 321
+                                                    xmax: 984
+                                                    ymax: 357
+                                                    ocr_text: "Apple"
+                    x-summary: OK
+                "404":
+                    $ref: "#/components/responses/NOT FOUND"
+            deprecated: false
+            x-codeSamples:
+                - lang: JavaScript
+                  label: Node.js
+                  source: >
+                      var request = require('request')
+
+                      const options = {
+                          url : 'https://app.nanonets.com/api/v2/Inferences/Model/' + 'REPLACE_MODEL_ID' + '/ImageLevelInferences?start_day_interval={start_day}&current_batch_day={end_day}',
+                          headers: {
+                              'Authorization' : 'Basic ' + Buffer.from('[[.ApiKey]]' + ':').toString('base64')
+                          }
+                      }
+
+                      request.get(options, function(err, httpResponse, body) {
+
+                        console.log(body)
+                      });
+                - lang: Python
+                  label: Python
+                  source: >-
+                      import requests
+
+
+                      url = 'https://app.nanonets.com/api/v2/Inferences/Model/' + 'REPLACE_MODEL_ID' + '/ImageLevelInferences?start_day_interval={start_day}&current_batch_day={end_day}'
+
+
+                      response = requests.request('GET', url,
+                      auth=requests.auth.HTTPBasicAuth('[[.ApiKey]]',''))
+
+
+                      print(response.text)
+                - lang: Shell
+                  label: CLI
+                  source: |-
+                      curl --request GET \
+                        --url 'https://app.nanonets.com/api/v2/Inferences/Model/{{model_id}}/ImageLevelInferences?start_day_interval={start_day}&current_batch_day={end_day}' \
+                        -u '[[.ApiKey]]'
+                - lang: Go
+                  label: Go
+                  source: |-
+                      package main
+
+                      import (
+                          "fmt"
+                          "net/http"
+                          "io/ioutil"
+                      )
+
+                      func main() {
+
+                          url := "https://app.nanonets.com/api/v2/Inferences/Model/{{model_id}}/ImageLevelInferences?start_day_interval={start_day}&current_batch_day={end_day}"
+
+                          req, _ := http.NewRequest("GET", url, nil)
+
+                          req.SetBasicAuth("[[.ApiKey]]", "")
+
+                          res, _ := http.DefaultClient.Do(req)
+
+                          defer res.Body.Close()
+                          body, _ := ioutil.ReadAll(res.Body)
+
+                          fmt.Println(res)
+                          fmt.Println(string(body))
+
+                      }
+                - lang: Ruby
+                  label: Ruby
+                  source: >-
+                      require 'uri'
+                      require 'net/http'
+
+                      url = URI("https://app.nanonets.com/api/v2/Inferences/Model/{{model_id}}/ImageLevelInferences?start_day_interval={start_day}&current_batch_day={end_day}")
+
+                      http = Net::HTTP.new(url.host, url.port)
+                      http.use_ssl = true
+
+                      request = Net::HTTP::Get.new(url)
+                      request.basic_auth '[[.ApiKey]]', ''
+                      response = http.request(request)
+
+                      puts response.read_body
+                - lang: C#
+                  label: C#
+                  source: >-
+                      var client = new RestClient("https://app.nanonets.com/api/v2/Inferences/Model/{{model_id}}/ImageLevelInferences?start_day_interval={start_day}&current_batch_day={end_day}");
+
+                      var request = new RestRequest(Method.GET);
+
+                      request.AddHeader("authorization", "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes("[[.ApiKey]]:")));
+
+                      IRestResponse response = client.Execute(request);
+                - lang: Java
+                  label: Java
+                  source: |-
+                      OkHttpClient client = new OkHttpClient();
+
+                      Request request = new Request.Builder()
+                        .url("https://app.nanonets.com/api/v2/Inferences/Model/{{model_id}}/ImageLevelInferences?start_day_interval={start_day}&current_batch_day={end_day}")
+                        .get()
+                        .addHeader("authorization", Credentials.basic("[[.ApiKey]]", ""))
+                        .build();
+
+                      Response response = client.newCall(request).execute();
 components:
     responses:
         OK:

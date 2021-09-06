@@ -1,28 +1,28 @@
 path:
     path_name:
-        post:
+        http_verb:
             tags:
                 - tag_name
             summary:
             description:
             operationId:
             parameters:
-                - name:
-                      in:
-                      description:
-                      required:
-                      schema:
+                - name: name_here
+                  in:
+                  description:
+                  required:
+                  schema:
+                      type:
+                      additional_properties: # 'items' used in arrays to indicate type of items in array, 'maxItems'
                           type:
-                          additional_properties: # 'items' used in arrays to indicate type of items in array, 'maxItems'
-                              type:
-                          format:
-                          description:
-                          pattern:
-                          minimum:
-                          maximum:
-                          default:
-                          enum:
-                          nullable:
+                      format:
+                      description:
+                      pattern:
+                      minimum:
+                      maximum:
+                      default:
+                      enum:
+                      nullable:
             requestBody:
                 description:
                 content:
@@ -90,3 +90,4 @@ path:
                     x-summary:
             deprecated:
             security:
+            x-codeSamples:
