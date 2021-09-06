@@ -1069,30 +1069,6 @@ tags:
     - name: Image Classification Predict
       description: "test"
       x-displayName: Predict
-    - name: Object Detection Model Details
-      description: "test"
-      x-displayName: Model Details
-    - name: Object Detection Upload
-      description: "test"
-      x-displayName: Upload
-    - name: Object Detection Train
-      description: "test"
-      x-displayName: Train
-    - name: Object Detection Predict
-      description: "test"
-      x-displayName: Predict
-    - name: Multi Label Image Classification Model Details
-      description: "test"
-      x-displayName: Model Details
-    - name: Multi Label Image Classification Upload
-      description: "test"
-      x-displayName: Upload
-    - name: Multi Label Image Classification Train
-      description: "test"
-      x-displayName: Train
-    - name: Multi Label Image Classification Predict
-      description: "test"
-      x-displayName: Predict
 x-tagGroups:
     - name: Optical Character Recognition
       tags:
@@ -1106,15 +1082,3 @@ x-tagGroups:
           - Image Classification Upload
           - Image Classification Train
           - Image Classification Predict
-    - name: Object Detection
-      tags:
-          - Object Detection Model Details
-          - Object Detection Upload
-          - Object Detection Train
-          - Object Detection Predict
-    - name: Multi Label Image Classification
-      tags:
-          - Multi Label Image Classification Model Details
-          - Multi Label Image Classification Upload
-          - Multi Label Image Classification Train
-          - Multi Label Image Classification Predict
