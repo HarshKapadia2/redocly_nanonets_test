@@ -48,6 +48,10 @@ paths:
                                             - name: category2
                                               count: 0
                     x-summary: OK
+                "401":
+                    $ref: "#/components/responses/UNAUTHORIZED"
+                "402":
+                    $ref: "#/components/responses/PAYMENT REQUIRED"
     /OCR/Model/{model_id}/UploadUrls:
         post:
             tags:
@@ -94,6 +98,10 @@ paths:
                 "400":
                     description: URL(s) missing. Check if an array of file URLs has been included in the request.
                     x-summary: BAD REQUEST
+                "401":
+                    $ref: "#/components/responses/UNAUTHORIZED"
+                "402":
+                    $ref: "#/components/responses/PAYMENT REQUIRED"
                 "404":
                     $ref: "#/components/responses/NOT FOUND"
             deprecated: false
@@ -288,6 +296,10 @@ paths:
                         - File missing. Check if the file has been included in the request.
                         - Incorrect file type. Check if file you included is a valid PNG, JPEG or PDF file.
                     x-summary: BAD REQUEST
+                "401":
+                    $ref: "#/components/responses/UNAUTHORIZED"
+                "402":
+                    $ref: "#/components/responses/PAYMENT REQUIRED"
                 "404":
                     $ref: "#/components/responses/NOT FOUND"
             deprecated: false
@@ -491,6 +503,10 @@ paths:
                 "400":
                     description: Model not ready for training. Check if the files for the model are uploaded.
                     x-summary: BAD REQUEST
+                "401":
+                    $ref: "#/components/responses/UNAUTHORIZED"
+                "402":
+                    $ref: "#/components/responses/PAYMENT REQUIRED"
                 "404":
                     $ref: "#/components/responses/NOT FOUND"
     /Inferences/Model/{model_id}/ImageLevelInferences:
@@ -570,6 +586,10 @@ paths:
                                                     ymax: 357
                                                     ocr_text: "Apple"
                     x-summary: OK
+                "401":
+                    $ref: "#/components/responses/UNAUTHORIZED"
+                "402":
+                    $ref: "#/components/responses/PAYMENT REQUIRED"
                 "404":
                     $ref: "#/components/responses/NOT FOUND"
             deprecated: false
@@ -698,6 +718,10 @@ paths:
             responses:
                 "200":
                     $ref: "#/components/responses/OK prediction"
+                "401":
+                    $ref: "#/components/responses/UNAUTHORIZED"
+                "402":
+                    $ref: "#/components/responses/PAYMENT REQUIRED"
                 "404":
                     $ref: "#/components/responses/NOT FOUND"
             deprecated: false
