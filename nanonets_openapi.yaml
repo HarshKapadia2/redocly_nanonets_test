@@ -252,11 +252,7 @@ paths:
             parameters:
                 - $ref: "#/components/parameters/model_id"
             requestBody:
-                description: |
-                    The parameters to be sent in the request's body.
-                    <br />
-                    <br />
-                    **NOTE**: Please [use `FormData` for JavaScript](https://developer.mozilla.org/en-US/docs/Web/API/FormData/FormData).
+                description: The parameters to be sent in the request's body.
                 content:
                     application/json:
                         schema:
