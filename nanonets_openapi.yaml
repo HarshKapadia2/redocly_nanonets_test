@@ -75,7 +75,8 @@ paths:
                                         type: string
                                     description: |
                                         Array of URL(s) of the training file(s).
-                                        Accepted file formats: PNG, JPEG, PDF
+                                        <br />
+                                        **Format**: PNG, JPEG and/or PDF
                 required: true
             responses:
                 "200":
@@ -246,7 +247,7 @@ paths:
                 On successful upload, model information along with the total number of images per category will be received.
                 <br />
                 <br />
-                NOTE: Batch file uploads are not supported by this end point.
+                **NOTE**: Batch file uploads are not supported by this end point.
             operationId: ocr/upload/file
             parameters:
                 - $ref: "#/components/parameters/model_id"
@@ -255,7 +256,7 @@ paths:
                     The parameters to be sent in the request's body.
                     <br />
                     <br />
-                    NOTE: Please [use `FormData` for JavaScript](https://developer.mozilla.org/en-US/docs/Web/API/FormData/FormData).
+                    **NOTE**: Please [use `FormData` for JavaScript](https://developer.mozilla.org/en-US/docs/Web/API/FormData/FormData).
                 content:
                     application/json:
                         schema:
@@ -267,15 +268,18 @@ paths:
                                 data:
                                     type: string
                                     description: |
-                                        The name of the file to be uploaded as a string **in the specified format**.
-                                        Format: `[{"filename": "filename.ext"}]`.
-                                        The `filename` must be the same as the uploaded file name.
+                                        The name of the file to be uploaded.
+                                        <br />
+                                        **Format**: `"data": "[{"filename": "filename.ext"}]"`.
+                                        <br />
+                                        **NOTE**: The `filename` must be the same as the uploaded file name.
                                 file:
                                     type: string
                                     format: binary
                                     description: |
                                         The file to be uploaded.
-                                        Accepted formats: PNG, JPEG, PDF
+                                        <br />
+                                        **Format**: PNG, JPEG or PDF
                         encoding:
                             file:
                                 contentType: image/png, image/jpeg, application/pdf
@@ -504,13 +508,25 @@ paths:
                 - $ref: "#/components/parameters/model_id"
                 - name: start_day_interval
                   in: query
-                  description: TBD
+                  description: |
+                      The start of the interval for which prediction files are needed.
+                      <br />
+                      **Format**: Number of days since [Unix epoch time](https://www.epochconverter.com)
+                      <br />
+                      **Eg**: 1620130500 seconds / 86400 seconds per day ~ `18,751` days
                   required: true
                   schema:
                       type: integer
                 - name: current_batch_day
                   in: query
-                  description: TBD
+                  description: |
+                      The end of the interval for which prediction files are needed.
+                      <br />
+                      **Format**: Number of days since [Unix epoch time](https://www.epochconverter.com)
+                      <br />
+                      **Eg**: 1630930872 seconds / 86400 seconds per day ~ `18,876` days
+                      <br />
+                      **NOTE**: The value of this parameter has to be greater than the value of the `start_day_interval` parameter.
                   required: true
                   schema:
                       type: integer
@@ -713,7 +729,8 @@ components:
             in: header
             description: |
                 Set the ['Content-Type' header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type) value.
-                Eg: `"Content-Type": "application/json"`
+                <br />
+                **Eg**: `"Content-Type": "application/json"`
             required: true
             schema:
                 type: string
@@ -722,7 +739,8 @@ components:
             in: path
             description: |
                 The ID of the model on which the operation is to be performed. It can be found in the model settings.
-                Eg: `0a0aa000-0000-0a0-aa00-000a0000000a`
+                <br />
+                **Eg**: `0a0aa000-0000-0a0-aa00-000a0000000a`
             required: true
             schema:
                 type: string
