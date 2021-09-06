@@ -697,83 +697,7 @@ paths:
                       nullable: false
             responses:
                 "200":
-                    description: Request successful.
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                            examples:
-                                OK:
-                                    summary: Prediction object.
-                                    description: >
-                                        200 OK: Request successful
-                                    value:
-                                        message: Success
-                                        result:
-                                            - message: Success
-                                              input: string
-                                              prediction:
-                                                  - label: category1
-                                                    xmin: 0
-                                                    ymin: 0
-                                                    xmax: 100
-                                                    ymax: 100
-                                                    score: 0.9
-                                                    ocr_text: string
-                                                  - label: ""
-                                                    ocr_text: table 1
-                                                    type: table
-                                                    score: 99.99
-                                                    xmin: 159
-                                                    xmax: 380
-                                                    ymin: 1258
-                                                    ymax: 1439
-                                                    cells:
-                                                        - row: 1
-                                                          col: 1
-                                                          row_span: 1
-                                                          col_span: 1
-                                                          label: col 1
-                                                          xmin: 159
-                                                          ymin: 1258
-                                                          xmax: 258
-                                                          ymax: 1357
-                                                          score: 99.99
-                                                          text: ocr text 1
-                                                        - row: 1
-                                                          col: 2
-                                                          row_span: 1
-                                                          col_span: 1
-                                                          label: col 2
-                                                          xmin: 258
-                                                          ymin: 1258
-                                                          xmax: 380
-                                                          ymax: 1357
-                                                          score: 99.99
-                                                          text: ocr text 2
-                                                        - row: 2
-                                                          col: 1
-                                                          row_span: 1
-                                                          col_span: 1
-                                                          label: col 1
-                                                          xmin: 159
-                                                          ymin: 1357
-                                                          xmax: 258
-                                                          ymax: 1439
-                                                          score: 99.99
-                                                          text: ocr text 3
-                                                        - row: 2
-                                                          col: 2
-                                                          row_span: 1
-                                                          col_span: 1
-                                                          label: col 2
-                                                          xmin: 258
-                                                          ymin: 1357
-                                                          xmax: 380
-                                                          ymax: 1439
-                                                          score: 99.99902
-                                                          text: ocr text 4
-                    x-summary: OK
+                    $ref: "#/components/responses/OK prediction"
                 "404":
                     $ref: "#/components/responses/NOT FOUND"
             deprecated: false
@@ -880,6 +804,49 @@ paths:
                         .build();
 
                       Response response = client.newCall(request).execute();
+    /OCR/Model/{model_id}/LabelFile:
+        post:
+            tags:
+                - Optical Character Recognition Predict
+            summary: Prediction for Image Files
+            description: Given an image file, predict the label(s) to which the file belongs.
+            operationId: ocr/predict/file
+            parameters:
+                - $ref: "#/components/parameters/model_id"
+            requestBody:
+                description: The parameters to be sent in the request's body.
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - file
+                            properties:
+                                file:
+                                    type: string
+                                    format: binary
+                                    description: |
+                                        The file to be uploaded.
+                                        <br />
+                                        **Format**: PNG, JPEG or PDF
+                        encoding:
+                            file:
+                                contentType: image/png, image/jpeg, application/pdf
+                required: true
+            responses:
+                "200":
+                    $ref: "#/components/responses/OK prediction"
+                "400":
+                    description: |
+                        - File missing. Check if a file has been included in the request.
+                        - Incorrect uploaded file. Check if the included file is a valid PNG, JPEG or PDF.
+                    x-summary: BAD REQUEST
+                "401":
+                    $ref: "#/components/responses/UNAUTHORIZED"
+                "402":
+                    $ref: "#/components/responses/PAYMENT REQUIRED"
+                "404":
+                    $ref: "#/components/responses/NOT FOUND"
 components:
     responses:
         OK:
@@ -920,6 +887,96 @@ components:
                                                 ymax: 100
                                       id: 00000000-0000-0000-0000-000000000000
             x-summary: OK
+        OK prediction:
+            description: Request successful.
+            content:
+                application/json:
+                    schema:
+                        type: object
+                    examples:
+                        OK:
+                            summary: Prediction object.
+                            description: >
+                                200 OK: Request successful
+                            value:
+                                message: Success
+                                result:
+                                    - message: Success
+                                      input: string
+                                      prediction:
+                                          - label: category1
+                                            xmin: 0
+                                            ymin: 0
+                                            xmax: 100
+                                            ymax: 100
+                                            score: 0.9
+                                            ocr_text: string
+                                          - label: ""
+                                            ocr_text: table 1
+                                            type: table
+                                            score: 99.99
+                                            xmin: 159
+                                            xmax: 380
+                                            ymin: 1258
+                                            ymax: 1439
+                                            cells:
+                                                - row: 1
+                                                  col: 1
+                                                  row_span: 1
+                                                  col_span: 1
+                                                  label: col 1
+                                                  xmin: 159
+                                                  ymin: 1258
+                                                  xmax: 258
+                                                  ymax: 1357
+                                                  score: 99.99
+                                                  text: ocr text 1
+                                                - row: 1
+                                                  col: 2
+                                                  row_span: 1
+                                                  col_span: 1
+                                                  label: col 2
+                                                  xmin: 258
+                                                  ymin: 1258
+                                                  xmax: 380
+                                                  ymax: 1357
+                                                  score: 99.99
+                                                  text: ocr text 2
+                                                - row: 2
+                                                  col: 1
+                                                  row_span: 1
+                                                  col_span: 1
+                                                  label: col 1
+                                                  xmin: 159
+                                                  ymin: 1357
+                                                  xmax: 258
+                                                  ymax: 1439
+                                                  score: 99.99
+                                                  text: ocr text 3
+                                                - row: 2
+                                                  col: 2
+                                                  row_span: 1
+                                                  col_span: 1
+                                                  label: col 2
+                                                  xmin: 258
+                                                  ymin: 1357
+                                                  xmax: 380
+                                                  ymax: 1439
+                                                  score: 99.99902
+                                                  text: ocr text 4
+            x-summary: OK
+        UNAUTHORIZED:
+            description: |
+                Request authorization unsuccessful.
+                <br />
+                - Please use a valid API key.
+                - Please check HTTP Basic Authorization Scheme format.
+            x-summary: UNAUTHORIZED
+        PAYMENT REQUIRED:
+            description: |
+                Free API call limit for the month has been exhausted.
+                Please change your plan.
+            x-summary: PAYMENT REQUIRED
         NOT FOUND:
             description: Model does not exist. Check if the model ID is correct.
             x-summary: NOT FOUND
