@@ -680,6 +680,210 @@ paths:
                         .build();
 
                       Response response = client.newCall(request).execute();
+    /Inferences/Model/{model_id}/ImageLevelInferences/{id}:
+        get:
+            tags:
+                - Optical Character Recognition Predict
+            summary: Get Prediction File by ID
+            description: Retrieve the prediction results of a particular file by its ID.
+            operationId: ocr/predict/id
+            parameters:
+                - $ref: "#/components/parameters/model_id"
+                - name: id
+                  in: path
+                  description: |
+                      The ID of the file for which the prediction has to be retrieved.
+                      <br />
+                      **Eg**: `0a0aa000-0000-0a0-aa00-000a0000000a`
+                  required: true
+                  schema:
+                      type: string
+                      nullable: false
+            responses:
+                "200":
+                    description: Request successful.
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                            examples:
+                                OK:
+                                    summary: Prediction object.
+                                    description: >
+                                        200 OK: Request successful
+                                    value:
+                                        message: Success
+                                        result:
+                                            - message: Success
+                                              input: string
+                                              prediction:
+                                                  - label: category1
+                                                    xmin: 0
+                                                    ymin: 0
+                                                    xmax: 100
+                                                    ymax: 100
+                                                    score: 0.9
+                                                    ocr_text: string
+                                                  - label: ""
+                                                    ocr_text: table 1
+                                                    type: table
+                                                    score: 99.99
+                                                    xmin: 159
+                                                    xmax: 380
+                                                    ymin: 1258
+                                                    ymax: 1439
+                                                    cells:
+                                                        - row: 1
+                                                          col: 1
+                                                          row_span: 1
+                                                          col_span: 1
+                                                          label: col 1
+                                                          xmin: 159
+                                                          ymin: 1258
+                                                          xmax: 258
+                                                          ymax: 1357
+                                                          score: 99.99
+                                                          text: ocr text 1
+                                                        - row: 1
+                                                          col: 2
+                                                          row_span: 1
+                                                          col_span: 1
+                                                          label: col 2
+                                                          xmin: 258
+                                                          ymin: 1258
+                                                          xmax: 380
+                                                          ymax: 1357
+                                                          score: 99.99
+                                                          text: ocr text 2
+                                                        - row: 2
+                                                          col: 1
+                                                          row_span: 1
+                                                          col_span: 1
+                                                          label: col 1
+                                                          xmin: 159
+                                                          ymin: 1357
+                                                          xmax: 258
+                                                          ymax: 1439
+                                                          score: 99.99
+                                                          text: ocr text 3
+                                                        - row: 2
+                                                          col: 2
+                                                          row_span: 1
+                                                          col_span: 1
+                                                          label: col 2
+                                                          xmin: 258
+                                                          ymin: 1357
+                                                          xmax: 380
+                                                          ymax: 1439
+                                                          score: 99.99902
+                                                          text: ocr text 4
+                    x-summary: OK
+                "404":
+                    $ref: "#/components/responses/NOT FOUND"
+            deprecated: false
+            x-codeSamples:
+                - lang: JavaScript
+                  label: Node.js
+                  source: >
+                      var request = require('request')
+
+                      const options = {
+                          url : 'https://app.nanonets.com/api/v2/Inferences/Model/{{model_id}}/ImageLevelInferences/{{id}}',
+                          headers: {
+                              'Authorization' : 'Basic ' + Buffer.from('[[.ApiKey]]' + ':').toString('base64')
+                          }
+                      }
+
+                      request.get(options, function(err, httpResponse, body) {
+
+                        console.log(body)
+                      });
+                - lang: Python
+                  label: Python
+                  source: >-
+                      import requests
+
+
+                      url = 'https://app.nanonets.com/api/v2/Inferences/Model/{{model_id}}/ImageLevelInferences/{{id}}'
+
+
+                      response = requests.request('GET', url,
+                      auth=requests.auth.HTTPBasicAuth('[[.ApiKey]]',''))
+
+
+                      print(response.text)
+                - lang: Shell
+                  label: CLI
+                  source: |-
+                      curl --request GET \
+                        --url 'https://app.nanonets.com/api/v2/Inferences/Model/{{model_id}}/ImageLevelInferences/{{id}}' \
+                        -u '[[.ApiKey]]'
+                - lang: Go
+                  label: Go
+                  source: |-
+                      package main
+
+                      import (
+                          "fmt"
+                          "net/http"
+                          "io/ioutil"
+                      )
+
+                      func main() {
+
+                          url := "https://app.nanonets.com/api/v2/Inferences/Model/{{model_id}}/ImageLevelInferences/{{id}}"
+
+                          req, _ := http.NewRequest("GET", url, nil)
+
+                          req.SetBasicAuth("[[.ApiKey]]", "")
+
+                          res, _ := http.DefaultClient.Do(req)
+
+                          defer res.Body.Close()
+                          body, _ := ioutil.ReadAll(res.Body)
+
+                          fmt.Println(res)
+                          fmt.Println(string(body))
+
+                      }
+                - lang: Ruby
+                  label: Ruby
+                  source: >-
+                      require 'uri'
+                      require 'net/http'
+
+                      url = URI("https://app.nanonets.com/api/v2/Inferences/Model/{{model_id}}/ImageLevelInferences/{{id}}")
+
+                      http = Net::HTTP.new(url.host, url.port)
+                      http.use_ssl = true
+
+                      request = Net::HTTP::Get.new(url)
+                      request.basic_auth '[[.ApiKey]]', ''
+                      response = http.request(request)
+
+                      puts response.read_body
+                - lang: C#
+                  label: C#
+                  source: >-
+                      var client = new RestClient("https://app.nanonets.com/api/v2/Inferences/Model/{{model_id}}/ImageLevelInferences/{{id}}");
+
+                      var request = new RestRequest(Method.GET);
+
+                      request.AddHeader("authorization", "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes("[[.ApiKey]]:")));
+
+                      IRestResponse response = client.Execute(request);
+                - lang: Java
+                  label: Java
+                  source: |-
+                      OkHttpClient client = new OkHttpClient();
+
+                      Request request = new Request.Builder()
+                        .url("https://app.nanonets.com/api/v2/Inferences/Model/{{model_id}}/ImageLevelInferences/{{id}}")
+                        .get()
+                        .addHeader("authorization", Credentials.basic("[[.ApiKey]]", ""))
+                        .build();
+
+                      Response response = client.newCall(request).execute();
 components:
     responses:
         OK:
