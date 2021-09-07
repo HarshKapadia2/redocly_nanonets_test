@@ -538,7 +538,7 @@ paths:
                       <br />
                       **Eg**: 1630930872 seconds / 86400 seconds per day ~ `18,876` days
                       <br />
-                      **NOTE**: The value of this parameter has to be greater than the value of the `start_day_interval` parameter.
+                      **NOTE**: The value of this parameter has to be greater than the value of the [`start_day_interval` parameter](#operation/ocr/predict/getfile!in=query&path=start_day_interval&t=request).
                   required: true
                   schema:
                       type: integer
@@ -1005,13 +1005,14 @@ paths:
                               .build();
 
                       Response response = client.newCall(request).execute();
-    /OCR/Model/{model_id}/LabelFile‎: # There is an empty character (https://emptycharacter.com) at the end of this path's name, which uniquely differentiates it from the other path.
+    /OCR/Model/{model_id}/LabelFile‎: # There is an empty character (https://emptycharacter.com) at the end of this path's name, which uniquely differentiates it from the other path with the same name.
         post:
             tags:
                 - Optical Character Recognition Predict
             summary: Async Prediction for Image Files
             description: |
-                TBD
+                Given an image file, extract data as per the label(s) specified in the model, <u>asynchronously</u>.
+                This end point will send back a response as soon as the file has been uploaded, with a file ID. To retrieve the extracted data from the uploaded file, please use this file ID and hit the [Get Prediction File by ID](#operation/ocr/predict/id) end point.
             operationId: ocr/predict/file/async
             parameters:
                 - $ref: "#/components/parameters/model_id"
