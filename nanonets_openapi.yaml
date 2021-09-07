@@ -714,7 +714,6 @@ paths:
                   required: true
                   schema:
                       type: string
-                      nullable: false
             responses:
                 "200":
                     $ref: "#/components/responses/OK prediction"
