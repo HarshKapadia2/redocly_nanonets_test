@@ -66,38 +66,14 @@ paths:
                 - $ref: "#/components/parameters/Content-Type"
                 - $ref: "#/components/parameters/model_id"
             requestBody:
-                description: The parameters to be sent in the request's body.
-                content:
-                    application/json:
-                        schema:
-                            required:
-                                - urls
-                            properties:
-                                urls:
-                                    type: array
-                                    items:
-                                        type: string
-                                    description: |
-                                        Array of URL(s) of the training file(s).
-                                        <br />
-                                        **Format**: PNG, JPEG and/or PDF
-                required: true
+                $ref: "#/components/requestBodies/urls"
             responses:
                 "200":
                     $ref: "#/components/responses/OK"
                 "202":
-                    description: |
-                        Request partially successful.
-                        <br />
-                        <br />
-                        One or more URLs
-                        - Might not be correct
-                        - Might be of the wrong file format
-                        - Got no response
-                    x-summary: ACCEPTED (Partially successful)
+                    $ref: "#/components/responses/partiallySuccessfulURL"
                 "400":
-                    description: URL(s) missing. Check if an array of file URLs has been included in the request.
-                    x-summary: BAD REQUEST
+                    $ref: "#/components/responses/missingURL"
                 "401":
                     $ref: "#/components/responses/UNAUTHORIZED"
                 "402":
@@ -1221,6 +1197,157 @@ paths:
                               .build();
 
                       Response response = client.newCall(request).execute();
+    /OCR/Model/{model_id}/LabelUrls:
+        post:
+            tags:
+                - Optical Character Recognition Predict
+            summary: Prediction for Image URLs
+            description: |
+                Given an image URL, extract data as per the label(s) specified in the model.
+                Multiple image URLs per request are allowed.
+            operationId: ocr/predict/url
+            parameters:
+                - $ref: "#/components/parameters/model_id"
+            requestBody:
+                $ref: "#/components/requestBodies/urls"
+            responses:
+                "200":
+                    $ref: "#/components/responses/OK prediction"
+                "202":
+                    $ref: "#/components/responses/partiallySuccessfulURL"
+                "400":
+                    $ref: "#/components/responses/missingURL"
+                "401":
+                    $ref: "#/components/responses/UNAUTHORIZED"
+                "402":
+                    $ref: "#/components/responses/PAYMENT REQUIRED"
+                "404":
+                    $ref: "#/components/responses/NOT FOUND"
+            deprecated: false
+            x-codeSamples:
+                - lang: JavaScript
+                  label: Node.js
+                  source: >
+                      var request = require('request')
+
+                      var querystring = require('querystring')
+
+                      const form_data = {'urls' : ['https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg']}
+
+                      const options = {
+                          url : 'https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelUrls/',
+                          body: querystring.stringify(form_data),
+                          headers: {
+                              'Authorization' : 'Basic ' + Buffer.from('[[.ApiKey]]' + ':').toString('base64'),
+                              'Content-Type': 'application/x-www-form-urlencoded'
+                          }
+                      }
+
+                      request.post(options, function(err, httpResponse, body) {
+
+                        console.log(body)
+                      });
+                - lang: Python
+                  label: Python
+                  source: |
+                      import requests
+
+                      url = 'https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelUrls/'
+
+                      headers = {
+                          'accept': 'application/x-www-form-urlencoded'
+                      }
+
+                      data = {'urls' : ['https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg']}
+
+                      response = requests.request('POST', url, headers=headers, auth=requests.auth.HTTPBasicAuth('[[.ApiKey]]', ''), data=data)
+
+                      print(response.text)
+                - lang: Shell
+                  label: CLI
+                  source: |
+                      curl --request POST \
+                          --url 'https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelUrls/' \
+                          --header 'accept: application/x-www-form-urlencoded' \
+                          -d 'urls=https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg' \
+                          -u '[[.ApiKey]]'
+                - lang: Go
+                  label: Go
+                  source: |
+                      package main
+
+                      import (
+                          "bytes"
+                          "fmt"
+                          "io/ioutil"
+                          "net/http"
+                          "net/url"
+                      )
+
+                      func main() {
+
+                          labelUrl := "https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelUrls/"
+
+                          data := url.Values{}
+                          data.Add("urls", "https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg")
+
+                          req, _ := http.NewRequest("POST", labelUrl, bytes.NewBufferString(data.Encode()))
+
+                          req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+                          req.SetBasicAuth("[[.ApiKey]]", "")
+
+                          res, _ := http.DefaultClient.Do(req)
+
+                          defer res.Body.Close()
+                          body, _ := ioutil.ReadAll(res.Body)
+
+                          fmt.Println(res)
+                          fmt.Println(string(body))
+
+                      }
+                - lang: Ruby
+                  label: Ruby
+                  source: |
+                      require 'uri'
+                      require 'net/http'
+
+                      url = URI('https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelUrls/')
+
+                      http = Net::HTTP.new(url.host, url.port)
+                      http.use_ssl = true
+
+                      request = Net::HTTP::Post.new(url)
+                      request["accept"] = 'application/x-www-form-urlencoded'
+                      request.basic_auth '[[.ApiKey]]', ''
+
+                      request.set_form_data({'urls' => ['https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg']})
+
+                      response = http.request(request)
+                      puts response.read_body
+                - lang: C#
+                  label: C#
+                  source: |
+                      var client = new RestClient("https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelUrls/");
+                      var request = new RestRequest(Method.POST);
+                      request.AddHeader("authorization", "Basic [[.ApiKey]]");
+                      request.AddHeader("accept", "application/x-www-form-urlencoded");
+                      request.AddParameter("urls", "https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg");
+                      IRestResponse response = client.Execute(request);
+                - lang: Java
+                  label: Java
+                  source: |
+                      OkHttpClient client = new OkHttpClient();
+
+                      RequestBody formBody = new FormBody.Builder()
+                              .add("urls", "https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg").build();
+
+                      Request request = new Request.Builder()
+                          .url("https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelUrls/")
+                          .post(formBody)
+                          .addHeader("Authorization", Credentials.basic("[[.ApiKey]]", ""))
+                          .build();
+
+                      Response response = client.newCall(request).execute();
 components:
     responses:
         OK:
@@ -1339,6 +1466,19 @@ components:
                                                   score: 99.99902
                                                   text: ocr text 4
             x-summary: OK
+        partiallySuccessfulURL:
+            description: |
+                Request partially successful.
+                <br />
+                <br />
+                One or more URLs
+                - Might not be correct.
+                - Might be of the wrong file format.
+                - Got no response.
+            x-summary: ACCEPTED (Partially successful)
+        missingURL:
+            description: URL(s) missing. Check if an array of file URLs has been included in the request.
+            x-summary: BAD REQUEST
         UNAUTHORIZED:
             description: |
                 Request authorization unsuccessful.
@@ -1395,6 +1535,23 @@ components:
                     encoding:
                         file:
                             contentType: image/png, image/jpeg, application/pdf
+            required: true
+        urls:
+            description: The parameters to be sent in the request's body.
+            content:
+                application/json:
+                    schema:
+                        required:
+                            - urls
+                        properties:
+                            urls:
+                                type: array
+                                items:
+                                    type: string
+                                description: |
+                                    Array of URL(s) of the training file(s).
+                                    <br />
+                                    **Format**: PNG, JPEG and/or PDF
             required: true
     securitySchemes:
         API Key:
