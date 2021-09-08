@@ -25,7 +25,7 @@ paths:
             description: Retrieve a specific model's details given its ID.
             operationId: ocr/model/id
             parameters:
-                - $ref: "#/components/parameters/model_id"
+                - $ref: "#/components/parameters/modelId"
             responses:
                 "200":
                     description: Request successful.
@@ -49,9 +49,9 @@ paths:
                                               count: 0
                     x-summary: OK
                 "401":
-                    $ref: "#/components/responses/UNAUTHORIZED"
+                    $ref: "#/components/responses/unauthorized"
                 "402":
-                    $ref: "#/components/responses/PAYMENT REQUIRED"
+                    $ref: "#/components/responses/paymentRequired"
     /OCR/Model/{model_id}/UploadUrls:
         post:
             tags:
@@ -63,23 +63,23 @@ paths:
                 On successful upload, model information along with the total number of images per category will be received.
             operationId: ocr/upload/url
             parameters:
-                - $ref: "#/components/parameters/Content-Type"
-                - $ref: "#/components/parameters/model_id"
+                - $ref: "#/components/parameters/contentType"
+                - $ref: "#/components/parameters/modelId"
             requestBody:
                 $ref: "#/components/requestBodies/urls"
             responses:
                 "200":
-                    $ref: "#/components/responses/OK"
+                    $ref: "#/components/responses/ok"
                 "202":
                     $ref: "#/components/responses/partiallySuccessfulURL"
                 "400":
                     $ref: "#/components/responses/missingURL"
                 "401":
-                    $ref: "#/components/responses/UNAUTHORIZED"
+                    $ref: "#/components/responses/unauthorized"
                 "402":
-                    $ref: "#/components/responses/PAYMENT REQUIRED"
+                    $ref: "#/components/responses/paymentRequired"
                 "404":
-                    $ref: "#/components/responses/NOT FOUND"
+                    $ref: "#/components/responses/notFound"
             deprecated: false
             x-codeSamples:
                 - lang: JavaScript
@@ -234,7 +234,7 @@ paths:
                 **NOTE**: Batch file uploads are not supported by this end point.
             operationId: ocr/upload/file
             parameters:
-                - $ref: "#/components/parameters/model_id"
+                - $ref: "#/components/parameters/modelId"
             requestBody:
                 description: The parameters to be sent in the request's body.
                 content:
@@ -266,18 +266,18 @@ paths:
                 required: true
             responses:
                 "200":
-                    $ref: "#/components/responses/OK"
+                    $ref: "#/components/responses/ok"
                 "400":
                     description: |
                         - File missing. Check if the file has been included in the request.
                         - Incorrect file type. Check if file you included is a valid PNG, JPEG or PDF file.
                     x-summary: BAD REQUEST
                 "401":
-                    $ref: "#/components/responses/UNAUTHORIZED"
+                    $ref: "#/components/responses/unauthorized"
                 "402":
-                    $ref: "#/components/responses/PAYMENT REQUIRED"
+                    $ref: "#/components/responses/paymentRequired"
                 "404":
-                    $ref: "#/components/responses/NOT FOUND"
+                    $ref: "#/components/responses/notFound"
             deprecated: false
             x-codeSamples:
                 - lang: JavaScript
@@ -453,7 +453,7 @@ paths:
                 The same end point is to be used to re-train a model after uploading more files to improve the model.
             operationId: ocr/train
             parameters:
-                - $ref: "#/components/parameters/model_id"
+                - $ref: "#/components/parameters/modelId"
             responses:
                 "200":
                     description: Request successful.
@@ -480,11 +480,11 @@ paths:
                     description: Model not ready for training. Check if the files for the model are uploaded.
                     x-summary: BAD REQUEST
                 "401":
-                    $ref: "#/components/responses/UNAUTHORIZED"
+                    $ref: "#/components/responses/unauthorized"
                 "402":
-                    $ref: "#/components/responses/PAYMENT REQUIRED"
+                    $ref: "#/components/responses/paymentRequired"
                 "404":
-                    $ref: "#/components/responses/NOT FOUND"
+                    $ref: "#/components/responses/notFound"
     /Inferences/Model/{model_id}/ImageLevelInferences:
         get:
             tags:
@@ -493,7 +493,7 @@ paths:
             description: Retrieve the files that have been processed by the prediction end points.
             operationId: ocr/predict/getfile
             parameters:
-                - $ref: "#/components/parameters/model_id"
+                - $ref: "#/components/parameters/modelId"
                 - name: start_day_interval
                   in: query
                   description: |
@@ -563,11 +563,11 @@ paths:
                                                     ocr_text: "Apple"
                     x-summary: OK
                 "401":
-                    $ref: "#/components/responses/UNAUTHORIZED"
+                    $ref: "#/components/responses/unauthorized"
                 "402":
-                    $ref: "#/components/responses/PAYMENT REQUIRED"
+                    $ref: "#/components/responses/paymentRequired"
                 "404":
-                    $ref: "#/components/responses/NOT FOUND"
+                    $ref: "#/components/responses/notFound"
             deprecated: false
             x-codeSamples:
                 - lang: JavaScript
@@ -680,7 +680,7 @@ paths:
             description: Retrieve the prediction results of a particular file by its ID.
             operationId: ocr/predict/id
             parameters:
-                - $ref: "#/components/parameters/model_id"
+                - $ref: "#/components/parameters/modelId"
                 - name: id
                   in: path
                   description: |
@@ -692,13 +692,13 @@ paths:
                       type: string
             responses:
                 "200":
-                    $ref: "#/components/responses/OK prediction"
+                    $ref: "#/components/responses/okPrediction"
                 "401":
-                    $ref: "#/components/responses/UNAUTHORIZED"
+                    $ref: "#/components/responses/unauthorized"
                 "402":
-                    $ref: "#/components/responses/PAYMENT REQUIRED"
+                    $ref: "#/components/responses/paymentRequired"
                 "404":
-                    $ref: "#/components/responses/NOT FOUND"
+                    $ref: "#/components/responses/notFound"
             deprecated: false
             x-codeSamples:
                 - lang: JavaScript
@@ -811,23 +811,23 @@ paths:
             description: Given an image file, extract data as per the label(s) specified in the model.
             operationId: ocr/predict/file
             parameters:
-                - $ref: "#/components/parameters/model_id"
+                - $ref: "#/components/parameters/modelId"
             requestBody:
                 $ref: "#/components/requestBodies/file"
             responses:
                 "200":
-                    $ref: "#/components/responses/OK prediction"
+                    $ref: "#/components/responses/okPrediction"
                 "400":
                     description: |
                         - File missing. Check if a file has been included in the request.
                         - Incorrect uploaded file. Check if the included file is a valid PNG, JPEG or PDF.
                     x-summary: BAD REQUEST
                 "401":
-                    $ref: "#/components/responses/UNAUTHORIZED"
+                    $ref: "#/components/responses/unauthorized"
                 "402":
-                    $ref: "#/components/responses/PAYMENT REQUIRED"
+                    $ref: "#/components/responses/paymentRequired"
                 "404":
-                    $ref: "#/components/responses/NOT FOUND"
+                    $ref: "#/components/responses/notFound"
             deprecated: false
             x-codeSamples:
                 - lang: JavaScript
@@ -991,7 +991,7 @@ paths:
                 This end point will send back a response as soon as the file has been uploaded, with a file ID. To retrieve the extracted data from the uploaded file, please use this file ID and hit the [Get Prediction File by ID](#operation/ocr/predict/id) end point.
             operationId: ocr/predict/file/async
             parameters:
-                - $ref: "#/components/parameters/model_id"
+                - $ref: "#/components/parameters/modelId"
                 - name: async
                   in: query
                   description: |
@@ -1039,11 +1039,11 @@ paths:
                         - Incorrect uploaded file. Check if the included file is a valid PNG, JPEG or PDF.
                     x-summary: BAD REQUEST
                 "401":
-                    $ref: "#/components/responses/UNAUTHORIZED"
+                    $ref: "#/components/responses/unauthorized"
                 "402":
-                    $ref: "#/components/responses/PAYMENT REQUIRED"
+                    $ref: "#/components/responses/paymentRequired"
                 "404":
-                    $ref: "#/components/responses/NOT FOUND"
+                    $ref: "#/components/responses/notFound"
             deprecated: false
             x-codeSamples:
                 - lang: JavaScript
@@ -1207,22 +1207,22 @@ paths:
                 Multiple image URLs per request are allowed.
             operationId: ocr/predict/url
             parameters:
-                - $ref: "#/components/parameters/model_id"
+                - $ref: "#/components/parameters/modelId"
             requestBody:
                 $ref: "#/components/requestBodies/urls"
             responses:
                 "200":
-                    $ref: "#/components/responses/OK prediction"
+                    $ref: "#/components/responses/okPrediction"
                 "202":
                     $ref: "#/components/responses/partiallySuccessfulURL"
                 "400":
                     $ref: "#/components/responses/missingURL"
                 "401":
-                    $ref: "#/components/responses/UNAUTHORIZED"
+                    $ref: "#/components/responses/unauthorized"
                 "402":
-                    $ref: "#/components/responses/PAYMENT REQUIRED"
+                    $ref: "#/components/responses/paymentRequired"
                 "404":
-                    $ref: "#/components/responses/NOT FOUND"
+                    $ref: "#/components/responses/notFound"
             deprecated: false
             x-codeSamples:
                 - lang: JavaScript
@@ -1350,7 +1350,7 @@ paths:
                       Response response = client.newCall(request).execute();
 components:
     responses:
-        OK:
+        ok:
             description: Request successful.
             content:
                 application/json:
@@ -1388,7 +1388,7 @@ components:
                                                 ymax: 100
                                       id: 00000000-0000-0000-0000-000000000000
             x-summary: OK
-        OK prediction:
+        okPrediction:
             description: Request successful.
             content:
                 application/json:
@@ -1479,23 +1479,23 @@ components:
         missingURL:
             description: URL(s) missing. Check if an array of file URLs has been included in the request.
             x-summary: BAD REQUEST
-        UNAUTHORIZED:
+        unauthorized:
             description: |
                 Request authorization unsuccessful.
                 <br />
                 - Please use a valid API key.
                 - Please check HTTP Basic Authorization Scheme format.
             x-summary: UNAUTHORIZED
-        PAYMENT REQUIRED:
+        paymentRequired:
             description: |
                 Free API call limit for the month has been exhausted.
                 Please [change the plan](https://app.nanonets.com/#/models) of the model.
             x-summary: PAYMENT REQUIRED
-        NOT FOUND:
+        notFound:
             description: Model does not exist. Check if the model ID is correct.
             x-summary: NOT FOUND
     parameters:
-        Content-Type:
+        contentType:
             name: Content-Type
             in: header
             description: |
@@ -1505,7 +1505,7 @@ components:
             required: true
             schema:
                 type: string
-        model_id:
+        modelId:
             name: model_id
             in: path
             description: |
@@ -1554,7 +1554,7 @@ components:
                                     **Format**: PNG, JPEG and/or PDF
             required: true
     securitySchemes:
-        API Key:
+        basicAuth:
             type: http
             description: >
                 When you sign up for an account, you are given your first API key.
@@ -1571,7 +1571,7 @@ components:
                 All API requests must be made over HTTPS. Calls made over plain HTTP will fail. API requests without authentication will also fail.
             scheme: Basic
 security:
-    - API Key: []
+    - basicAuth: []
 tags:
     - name: Optical Character Recognition Model Details
       description: "test"
