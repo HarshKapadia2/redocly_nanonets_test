@@ -34,7 +34,7 @@ paths:
                             schema:
                                 type: object
                             examples:
-                                OK:
+                                ok:
                                     summary: Request successful
                                     description: >
                                         200 OK: Request successful
@@ -462,7 +462,7 @@ paths:
                             schema:
                                 type: object
                             examples:
-                                OK:
+                                ok:
                                     summary: Request successful
                                     description: >
                                         200 OK: Request successful
@@ -626,7 +626,7 @@ paths:
                             schema:
                                 type: object
                             examples:
-                                OK:
+                                ok:
                                     summary: Request successful.
                                     description: >
                                         200 OK: Request successful
@@ -1116,7 +1116,7 @@ paths:
                             schema:
                                 type: object
                             examples:
-                                OK:
+                                ok:
                                     summary: Successful request.
                                     description: >
                                         200 OK: Request successful
@@ -1457,7 +1457,7 @@ components:
                     schema:
                         type: object
                     examples:
-                        OK:
+                        ok:
                             summary: Request successful
                             description: >
                                 200 OK: Request successful
@@ -1495,7 +1495,7 @@ components:
                     schema:
                         type: object
                     examples:
-                        OK:
+                        ok:
                             summary: Prediction object.
                             description: >
                                 200 OK: Request successful
