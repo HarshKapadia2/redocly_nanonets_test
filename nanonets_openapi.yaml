@@ -20,7 +20,7 @@ paths:
     /OCR/Model/{model_id}:
         get:
             tags:
-                - Optical Character Recognition Model Details
+                - ocrModelDetails
             summary: Get Model Details by ID
             description: Retrieve a specific model's details given its ID.
             operationId: ocr/model/id
@@ -36,7 +36,7 @@ paths:
     /OCR/Model/{model_id}/UploadUrls:
         post:
             tags:
-                - Optical Character Recognition Upload
+                - ocrUpload
             summary: Upload Training Images by URL
             description: |
                 Upload training images to a model using image URLs.
@@ -205,7 +205,7 @@ paths:
     /OCR/Model/{model_id}/UploadFile:
         post:
             tags:
-                - Optical Character Recognition Upload
+                - ocrUpload
             summary: Upload Training Images by File
             description: |
                 Upload a training image to the specified model using a locally stored file.
@@ -427,7 +427,7 @@ paths:
     /OCR/Model/{model_id}/Train:
         post:
             tags:
-                - Optical Character Recognition Train
+                - ocrTrain
             summary: Train Model
             description: |
                 Train a model after uploading files to the model.
@@ -569,10 +569,10 @@ paths:
     /Inferences/Model/{model_id}/ImageLevelInferences:
         get:
             tags:
-                - Optical Character Recognition Predict
+                - ocrPredict
             summary: Get All Prediction Files
             description: Retrieve the files that have been processed by the prediction end points.
-            operationId: ocr/predict/getfile
+            operationId: ocr/predict/getFile
             parameters:
                 - $ref: "#/components/parameters/modelId"
                 - name: start_day_interval
@@ -756,7 +756,7 @@ paths:
     /Inferences/Model/{model_id}/ImageLevelInferences/{id}:
         get:
             tags:
-                - Optical Character Recognition Predict
+                - ocrPredict
             summary: Get Prediction File by ID
             description: Retrieve the prediction results of a particular file by its ID.
             operationId: ocr/predict/id
@@ -887,7 +887,7 @@ paths:
     /OCR/Model/{model_id}/LabelFile:
         post:
             tags:
-                - Optical Character Recognition Predict
+                - ocrPredict
             summary: Prediction for Image Files
             description: Given an image file, extract data as per the label(s) specified in the model.
             operationId: ocr/predict/file
@@ -1065,7 +1065,7 @@ paths:
     /OCR/Model/{model_id}/LabelFile‎: # There is an empty character (https://emptycharacter.com) at the end of this path's name, which uniquely differentiates it from the other path with the same name.
         post:
             tags:
-                - Optical Character Recognition Predict
+                - ocrPredict
             summary: Async Prediction for Image Files
             description: |
                 Given an image file, extract data as per the label(s) specified in the model, <u>asynchronously</u>.
@@ -1246,7 +1246,7 @@ paths:
     /OCR/Model/{model_id}/LabelUrls:
         post:
             tags:
-                - Optical Character Recognition Predict
+                - ocrPredict
             summary: Prediction for Image URLs
             description: |
                 Given image URL(s), extract data as per the label(s) specified in the model.
@@ -1397,7 +1397,7 @@ paths:
     /OCR/Model/{model_id}/LabelUrls‎: # There is an empty character (https://emptycharacter.com) at the end of this path's name, which uniquely differentiates it from the other path with the same name.
         post:
             tags:
-                - Optical Character Recognition Predict
+                - ocrPredict
             summary: Async Prediction for Image URLs
             description: |
                 Given image URL(s), extract data as per the label(s) specified in the model, <u>asynchronously</u>.
@@ -1547,10 +1547,10 @@ paths:
     /ImageCategorization/Models:
         get:
             tags:
-                - Image Classification Model Details
+                - icModelDetails
             summary: Get All Model Details
             description: Get information of all models in an account, irrespective of the type of model (OCR model or Image Classification model).
-            operationId: imageClassification/model/all
+            operationId: ic/model/all
             parameters:
                 - name: id
                   in: query
@@ -1971,40 +1971,40 @@ components:
 security:
     - basicAuth: []
 tags:
-    - name: Optical Character Recognition Model Details
+    - name: ocrModelDetails
       description: "test"
-      x-displayName: Model Details
-    - name: Optical Character Recognition Upload
+      x-displayName: OCR Model Details
+    - name: ocrUpload
       description: "test"
-      x-displayName: Upload
-    - name: Optical Character Recognition Train
+      x-displayName: OCR Upload
+    - name: ocrTrain
       description: "test"
-      x-displayName: Train
-    - name: Optical Character Recognition Predict
+      x-displayName: OCR Train
+    - name: ocrPredict
       description: "test"
-      x-displayName: Predict
-    - name: Image Classification Model Details
+      x-displayName: OCR Predict
+    - name: icModelDetails
       description: "test"
-      x-displayName: Model Details
-    - name: Image Classification Upload
+      x-displayName: IC Model Details
+    - name: icUpload
       description: "test"
-      x-displayName: Upload
-    - name: Image Classification Train
+      x-displayName: IC Upload
+    - name: icTrain
       description: "test"
-      x-displayName: Train
-    - name: Image Classification Predict
+      x-displayName: IC Train
+    - name: icPredict
       description: "test"
-      x-displayName: Predict
+      x-displayName: IC Predict
 x-tagGroups:
-    - name: Optical Character Recognition
+    - name: Optical Character Recognition (OCR)
       tags:
-          - Optical Character Recognition Model Details
-          - Optical Character Recognition Upload
-          - Optical Character Recognition Train
-          - Optical Character Recognition Predict
-    - name: Image Classification
+          - ocrModelDetails
+          - ocrUpload
+          - ocrTrain
+          - ocrPredict
+    - name: Image Classification (IC)
       tags:
-          - Image Classification Model Details
-          - Image Classification Upload
-          - Image Classification Train
-          - Image Classification Predict
+          - icModelDetails
+          - icUpload
+          - icTrain
+          - icPredict
