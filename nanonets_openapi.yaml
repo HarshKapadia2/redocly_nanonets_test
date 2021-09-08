@@ -28,26 +28,7 @@ paths:
                 - $ref: "#/components/parameters/modelId"
             responses:
                 "200":
-                    description: Request successful.
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                            examples:
-                                ok:
-                                    summary: Request successful
-                                    description: >
-                                        200 OK: Request successful
-                                    value:
-                                        model_id: 00000000-0000-0000-0000-000000000000
-                                        model_type: ocr
-                                        state: 0
-                                        categories:
-                                            - name: category1
-                                              count: 0
-                                            - name: category2
-                                              count: 0
-                    x-summary: OK
+                    $ref: "#/components/responses/modelObject"
                 "401":
                     $ref: "#/components/responses/unauthorized"
                 "402":
@@ -1092,47 +1073,12 @@ paths:
             operationId: ocr/predict/file/async
             parameters:
                 - $ref: "#/components/parameters/modelId"
-                - name: async
-                  in: query
-                  description: |
-                      Indicates that the request has to be processed asynchronously.
-                      <br />
-                      **NOTE**: `true` is the only accepted value.
-                  required: true
-                  schema:
-                      type: boolean
+                - $ref: "#/components/parameters/async"
             requestBody:
                 $ref: "#/components/requestBodies/file"
             responses:
                 "200":
-                    description: |
-                        The response can contain three status messages
-
-                        - `success`: The file has been successfully processed.
-                        - `pending`: The file is in the queue and will be processed.
-                        - `failure`: There was an issue while processing the file. It has been re-tried three times. It is recommended to re-upload the file and if the issue persists, please [contact support](mailto:support@nanonets.com).
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                            examples:
-                                ok:
-                                    summary: Successful request.
-                                    description: >
-                                        200 OK: Request successful
-                                    value:
-                                        message: Success
-                                        result:
-                                            - message: Success
-                                              result:
-                                                  - message: "Success"
-                                                    input: "filename.jpg"
-                                                    prediction: []
-                                                    page: 55
-                                                    request_file_id: "00000000-0000-0000-0000-000000000000"
-                                                    filepath: "uploadedfiles/00000000-0000-0000-0000-000000000000/PredictionImages/filename.jpeg"
-                                                    id: "00000000-0000-0000-0000-000000000000"
-                    x-summary: OK
+                    $ref: "#/components/responses/okAsync"
                 "400":
                     description: |
                         - File missing. Check if a file has been included in the request.
@@ -1303,7 +1249,7 @@ paths:
                 - Optical Character Recognition Predict
             summary: Prediction for Image URLs
             description: |
-                Given an image URL, extract data as per the label(s) specified in the model.
+                Given image URL(s), extract data as per the label(s) specified in the model.
                 Multiple image URLs per request are allowed.
             operationId: ocr/predict/url
             parameters:
@@ -1448,8 +1394,319 @@ paths:
                           .build();
 
                       Response response = client.newCall(request).execute();
+    /OCR/Model/{model_id}/LabelUrls‎: # There is an empty character (https://emptycharacter.com) at the end of this path's name, which uniquely differentiates it from the other path with the same name.
+        post:
+            tags:
+                - Optical Character Recognition Predict
+            summary: Async Prediction for Image URLs
+            description: |
+                Given image URL(s), extract data as per the label(s) specified in the model, <u>asynchronously</u>.
+                This end point will send back a response as soon as the file has been uploaded, with a file ID. To retrieve the extracted data from the uploaded file, please use this file ID and hit the [Get Prediction File by ID](#operation/ocr/predict/id) end point.
+            operationId: ocr/predict/url/async
+            parameters:
+                - $ref: "#/components/parameters/modelId"
+                - $ref: "#/components/parameters/async"
+            requestBody:
+                $ref: "#/components/requestBodies/urls"
+            responses:
+                "200":
+                    $ref: "#/components/responses/okAsync"
+                "400":
+                    $ref: "#/components/responses/missingURL"
+                "401":
+                    $ref: "#/components/responses/unauthorized"
+                "402":
+                    $ref: "#/components/responses/paymentRequired"
+                "404":
+                    $ref: "#/components/responses/notFound"
+            deprecated: false
+            x-codeSamples:
+                - lang: JavaScript
+                  label: Node.js
+                  source: >
+                      var request = require('request')
+
+                      var querystring = require('querystring')
+
+                      const form_data = {'urls' : ['https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg']}
+
+                      const options = {
+                          url : 'https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelUrls/?async=true',
+                          body: querystring.stringify(form_data),
+                          headers: {
+                              'Authorization' : 'Basic ' + Buffer.from('[[.ApiKey]]' + ':').toString('base64'),
+                              'Content-Type': 'application/x-www-form-urlencoded'
+                          }
+                      }
+
+                      request.post(options, function(err, httpResponse, body) {
+
+                        console.log(body)
+                      });
+                - lang: Python
+                  label: Python
+                  source: |
+                      import requests
+
+                      url = 'https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelUrls/?async=true'
+
+                      headers = {
+                          'accept': 'application/x-www-form-urlencoded'
+                      }
+
+                      data = {'urls' : ['https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg']}
+
+                      response = requests.request('POST', url, headers=headers, auth=requests.auth.HTTPBasicAuth('[[.ApiKey]]', ''), data=data)
+
+                      print(response.text)
+                - lang: Shell
+                  label: CLI
+                  source: |
+                      curl --request POST \
+                          --url 'https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelUrls/?async=true' \
+                          --header 'accept: application/x-www-form-urlencoded' \
+                          -d 'urls=https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg' \
+                          -u '[[.ApiKey]]'
+                - lang: Go
+                  label: Go
+                  source: |
+                      package main
+
+                      import (
+                          "bytes"
+                          "fmt"
+                          "io/ioutil"
+                          "net/http"
+                          "net/url"
+                      )
+
+                      func main() {
+
+                          labelUrl := "https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelUrls/?async=true"
+
+                          data := url.Values{}
+                          data.Add("urls", "https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg")
+
+                          req, _ := http.NewRequest("POST", labelUrl, bytes.NewBufferString(data.Encode()))
+
+                          req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+                          req.SetBasicAuth("[[.ApiKey]]", "")
+
+                          res, _ := http.DefaultClient.Do(req)
+
+                          defer res.Body.Close()
+                          body, _ := ioutil.ReadAll(res.Body)
+
+                          fmt.Println(res)
+                          fmt.Println(string(body))
+
+                      }
+                - lang: Ruby
+                  label: Ruby
+                  source: |
+                      require 'uri'
+                      require 'net/http'
+
+                      url = URI('https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelUrls/?async=true')
+
+                      http = Net::HTTP.new(url.host, url.port)
+                      http.use_ssl = true
+
+                      request = Net::HTTP::Post.new(url)
+                      request["accept"] = 'application/x-www-form-urlencoded'
+                      request.basic_auth '[[.ApiKey]]', ''
+
+                      request.set_form_data({'urls' => ['https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg']})
+
+                      response = http.request(request)
+                      puts response.read_body
+                - lang: C#
+                  label: C#
+                  source: |
+                      var client = new RestClient("https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelUrls/?async=true");
+                      var request = new RestRequest(Method.POST);
+                      request.AddHeader("authorization", "Basic [[.ApiKey]]");
+                      request.AddHeader("accept", "application/x-www-form-urlencoded");
+                      request.AddParameter("urls", "https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg");
+                      IRestResponse response = client.Execute(request);
+                - lang: Java
+                  label: Java
+                  source: |
+                      OkHttpClient client = new OkHttpClient();
+
+                      RequestBody formBody = new FormBody.Builder()
+                              .add("urls", "https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg").build();
+
+                      Request request = new Request.Builder()
+                          .url("https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelUrls/?async=true")
+                          .post(formBody)
+                          .addHeader("Authorization", Credentials.basic("[[.ApiKey]]", ""))
+                          .build();
+
+                      Response response = client.newCall(request).execute();
+    /ImageCategorization/Models:
+        get:
+            tags:
+                - Image Classification Model Details
+            summary: Get All Model Details
+            description: Get information of all models in an account, irrespective of the type of model (OCR model or Image Classification model).
+            operationId: imageClassification/model/all
+            parameters:
+                - name: id
+                  in: query
+                  description: |
+                      The ID of the model on which the operation is to be performed. It can be found in the model settings.
+                      <br />
+                      **Eg**: `0a0aa000-0000-0a0-aa00-000a0000000a`
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    $ref: "#/components/responses/modelObject"
+                "401":
+                    $ref: "#/components/responses/unauthorized"
+                "402":
+                    $ref: "#/components/responses/paymentRequired"
+            deprecated: false
+            x-codeSamples:
+                - lang: JavaScript
+                  label: Node.js
+                  source: >
+                      var request = require('request')
+
+                      const options = {
+                          url : 'https://app.nanonets.com/api/v2/ImageCategorization/Models/',
+                          headers: {
+                              'Authorization' : 'Basic ' + Buffer.from('[[.ApiKey]]' + ':').toString('base64')
+                          }
+                      }
+
+                      request.get(options, function(err, httpResponse, body) {
+
+                        console.log(body)
+                      });
+                - lang: Python
+                  label: Python
+                  source: >-
+                      import requests
+
+
+                      url = 'https://app.nanonets.com/api/v2/ImageCategorization/Models/'
+
+
+                      response = requests.request('GET', url, auth= requests.auth.HTTPBasicAuth('[[.ApiKey]]', ''))
+
+
+                      print(response.text)
+                - lang: Shell
+                  label: CLI
+                  source: |-
+                      curl --request GET \
+                        --url https://app.nanonets.com/api/v2/ImageCategorization/Models/ \
+                        -u '[[.ApiKey]]'
+                - lang: Go
+                  label: Go
+                  source: |-
+                      package main
+
+                      import (
+                          "fmt"
+                          "net/http"
+                          "io/ioutil"
+                      )
+
+                      func main() {
+
+                          url := "https://app.nanonets.com/api/v2/ImageCategorization/Models/"
+
+                          req, err := http.NewRequest("GET", url, nil)
+                          if err != nil {
+                              fmt.Println(err)
+                              return
+                          }
+
+                          req.SetBasicAuth("[[.ApiKey]]", "")
+
+                          res, err := http.DefaultClient.Do(req)
+                          if err != nil {
+                              fmt.Println(err)
+                              return
+                          }
+
+                          defer res.Body.Close()
+                          body, err := ioutil.ReadAll(res.Body)
+                          if err != nil {
+                              fmt.Println(err)
+                              return
+                          }
+
+                          fmt.Println(res)
+                          fmt.Println(string(body))
+
+                      }
+                - lang: Ruby
+                  label: Ruby
+                  source: >-
+                      require 'uri'
+                      require 'net/http'
+
+                      url = URI('https://app.nanonets.com/api/v2/ImageCategorization/Models/')
+
+                      http = Net::HTTP.new(url.host, url.port)
+                      http.use_ssl = true
+
+                      request = Net::HTTP::Get.new(url)
+                      request.basic_auth '[[.ApiKey]]', ''
+                      response = http.request(request)
+
+                      puts response.read_body
+                - lang: C#
+                  label: C#
+                  source: >
+                      var client = new
+                      RestClient("https://app.nanonets.com/api/v2/ImageCategorization/Models/");
+
+                      var request = new RestRequest(Method.GET);
+
+                      request.AddHeader("authorization", "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes("[[.ApiKey]]:")));
+
+                      IRestResponse response = client.Execute(request);
+                - lang: Java
+                  label: Java
+                  source: |-
+                      OkHttpClient client = new OkHttpClient();
+
+                      Request request = new Request.Builder()
+                        .url("https://app.nanonets.com/api/v2/ImageCategorization/Models/")
+                        .get()
+                        .addHeader("authorization", Credentials.basic("[[.ApiKey]]", ""))
+                        .build();
+
+                      Response response = client.newCall(request).execute();
 components:
     responses:
+        modelObject:
+            description: Request successful.
+            content:
+                application/json:
+                    schema:
+                        type: object
+                    examples:
+                        ok:
+                            summary: Request successful
+                            description: >
+                                200 OK: Request successful
+                            value:
+                                model_id: 00000000-0000-0000-0000-000000000000
+                                model_type: ocr
+                                state: 0
+                                categories:
+                                    - name: category1
+                                      count: 0
+                                    - name: category2
+                                      count: 0
+            x-summary: OK
         ok:
             description: Request successful.
             content:
@@ -1566,6 +1823,35 @@ components:
                                                   score: 99.99902
                                                   text: ocr text 4
             x-summary: OK
+        okAsync:
+            description: |
+                The response can contain three status messages
+
+                - `success`: The file has been successfully processed.
+                - `pending`: The file is in the queue and will be processed.
+                - `failure`: There was an issue while processing the file. It has been re-tried three times. It is recommended to re-upload the file and if the issue persists, please [contact support](mailto:support@nanonets.com).
+            content:
+                application/json:
+                    schema:
+                        type: object
+                    examples:
+                        ok:
+                            summary: Successful request.
+                            description: >
+                                200 OK: Request successful
+                            value:
+                                message: Success
+                                result:
+                                    - message: Success
+                                      result:
+                                          - message: "Success"
+                                            input: "filename.jpg"
+                                            prediction: []
+                                            page: 55
+                                            request_file_id: "00000000-0000-0000-0000-000000000000"
+                                            filepath: "uploadedfiles/00000000-0000-0000-0000-000000000000/PredictionImages/filename.jpeg"
+                                            id: "00000000-0000-0000-0000-000000000000"
+            x-summary: OK
         partiallySuccessfulURL:
             description: |
                 Request partially successful.
@@ -1577,7 +1863,9 @@ components:
                 - Got no response.
             x-summary: ACCEPTED (Partially successful)
         missingURL:
-            description: URL(s) missing. Check if an array of file URLs has been included in the request.
+            description: |
+                URL(s) missing.
+                Check if an array of file URLs has been included in the request.
             x-summary: BAD REQUEST
         unauthorized:
             description: |
@@ -1615,6 +1903,16 @@ components:
             required: true
             schema:
                 type: string
+        async:
+            name: async
+            in: query
+            description: |
+                Indicates that the request has to be processed asynchronously.
+                <br />
+                **NOTE**: `true` is the only accepted value.
+            required: true
+            schema:
+                type: boolean
     requestBodies:
         file:
             description: The parameters to be sent in the request's body.
