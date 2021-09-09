@@ -179,7 +179,7 @@ paths:
                       IRestResponse response = client.Execute(request);
                 - lang: Java
                   label: Java
-                  source: >-
+                  source: >
                       OkHttpClient client = new OkHttpClient();
 
 
@@ -280,7 +280,7 @@ paths:
                       });
                 - lang: Python
                   label: Python
-                  source: >-
+                  source: >
                       import requests
 
 
@@ -496,7 +496,7 @@ paths:
                           -u '[[.ApiKey]]'
                 - lang: Go
                   label: Go
-                  source: |-
+                  source: |
                       package main
 
                       import (
@@ -524,7 +524,7 @@ paths:
                       }
                 - lang: Ruby
                   label: Ruby
-                  source: >-
+                  source: >
                       require 'uri'
                       require 'net/http'
 
@@ -540,7 +540,7 @@ paths:
                       puts response.read_body
                 - lang: C#
                   label: C#
-                  source: >-
+                  source: >
                       var client = new
                       RestClient("https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/Train/");
 
@@ -551,7 +551,7 @@ paths:
                       IRestResponse response = client.Execute(request);
                 - lang: Java
                   label: Java
-                  source: |-
+                  source: |
                       OkHttpClient client = new OkHttpClient();
 
                       Request request = new Request.Builder()
@@ -664,7 +664,7 @@ paths:
                       });
                 - lang: Python
                   label: Python
-                  source: >-
+                  source: >
                       import requests
 
 
@@ -678,13 +678,13 @@ paths:
                       print(response.text)
                 - lang: Shell
                   label: CLI
-                  source: |-
+                  source: |
                       curl --request GET \
                         --url 'https://app.nanonets.com/api/v2/Inferences/Model/{{model_id}}/ImageLevelInferences?start_day_interval={start_day}&current_batch_day={end_day}' \
                         -u '[[.ApiKey]]'
                 - lang: Go
                   label: Go
-                  source: |-
+                  source: |
                       package main
 
                       import (
@@ -712,7 +712,7 @@ paths:
                       }
                 - lang: Ruby
                   label: Ruby
-                  source: >-
+                  source: >
                       require 'uri'
                       require 'net/http'
 
@@ -728,7 +728,7 @@ paths:
                       puts response.read_body
                 - lang: C#
                   label: C#
-                  source: >-
+                  source: >
                       var client = new RestClient("https://app.nanonets.com/api/v2/Inferences/Model/{{model_id}}/ImageLevelInferences?start_day_interval={start_day}&current_batch_day={end_day}");
 
                       var request = new RestRequest(Method.GET);
@@ -738,7 +738,7 @@ paths:
                       IRestResponse response = client.Execute(request);
                 - lang: Java
                   label: Java
-                  source: |-
+                  source: |
                       OkHttpClient client = new OkHttpClient();
 
                       Request request = new Request.Builder()
@@ -795,7 +795,7 @@ paths:
                       });
                 - lang: Python
                   label: Python
-                  source: >-
+                  source: >
                       import requests
 
 
@@ -809,13 +809,13 @@ paths:
                       print(response.text)
                 - lang: Shell
                   label: CLI
-                  source: |-
+                  source: |
                       curl --request GET \
                         --url 'https://app.nanonets.com/api/v2/Inferences/Model/{{model_id}}/ImageLevelInferences/{{id}}' \
                         -u '[[.ApiKey]]'
                 - lang: Go
                   label: Go
-                  source: |-
+                  source: |
                       package main
 
                       import (
@@ -843,7 +843,7 @@ paths:
                       }
                 - lang: Ruby
                   label: Ruby
-                  source: >-
+                  source: >
                       require 'uri'
                       require 'net/http'
 
@@ -859,7 +859,7 @@ paths:
                       puts response.read_body
                 - lang: C#
                   label: C#
-                  source: >-
+                  source: >
                       var client = new RestClient("https://app.nanonets.com/api/v2/Inferences/Model/{{model_id}}/ImageLevelInferences/{{id}}");
 
                       var request = new RestRequest(Method.GET);
@@ -869,7 +869,7 @@ paths:
                       IRestResponse response = client.Execute(request);
                 - lang: Java
                   label: Java
-                  source: |-
+                  source: |
                       OkHttpClient client = new OkHttpClient();
 
                       Request request = new Request.Builder()
@@ -1573,7 +1573,7 @@ paths:
                       });
                 - lang: Python
                   label: Python
-                  source: >-
+                  source: >
                       import requests
 
 
@@ -1586,13 +1586,13 @@ paths:
                       print(response.text)
                 - lang: Shell
                   label: CLI
-                  source: |-
+                  source: |
                       curl --request GET \
                         --url https://app.nanonets.com/api/v2/ImageCategorization/Models/ \
                         -u '[[.ApiKey]]'
                 - lang: Go
                   label: Go
-                  source: |-
+                  source: |
                       package main
 
                       import (
@@ -1632,7 +1632,7 @@ paths:
                       }
                 - lang: Ruby
                   label: Ruby
-                  source: >-
+                  source: >
                       require 'uri'
                       require 'net/http'
 
@@ -1659,7 +1659,7 @@ paths:
                       IRestResponse response = client.Execute(request);
                 - lang: Java
                   label: Java
-                  source: |-
+                  source: |
                       OkHttpClient client = new OkHttpClient();
 
                       Request request = new Request.Builder()
@@ -1715,7 +1715,7 @@ paths:
                       });
                 - lang: Python
                   label: Python
-                  source: >-
+                  source: >
                       import requests
 
 
@@ -1731,13 +1731,13 @@ paths:
                       print(response.text)
                 - lang: Shell
                   label: CLI
-                  source: |-
+                  source: |
                       curl --request GET \
                         --url 'https://app.nanonets.com/api/v2/ImageCategorization/Model/?id=REPLACE_MODEL_ID' \
                         -u '[[.ApiKey]]'
                 - lang: Go
                   label: Go
-                  source: |-
+                  source: |
                       package main
 
                       import (
@@ -1777,7 +1777,7 @@ paths:
                       }
                 - lang: Ruby
                   label: Ruby
-                  source: >-
+                  source: >
                       require 'uri'
                       require 'net/http'
 
@@ -1793,7 +1793,7 @@ paths:
                       puts response.read_body
                 - lang: C#
                   label: C#
-                  source: >-
+                  source: >
                       var client = new RestClient("https://app.nanonets.com/api/v2/ImageCategorization/Model/?id=REPLACE_MODEL_ID");
 
                       var request = new RestRequest(Method.GET);
@@ -1803,7 +1803,7 @@ paths:
                       IRestResponse response = client.Execute(request);
                 - lang: Java
                   label: Java
-                  source: |-
+                  source: |
                       OkHttpClient client = new OkHttpClient();
 
                       Request request = new Request.Builder()
