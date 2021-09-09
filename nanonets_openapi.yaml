@@ -1551,16 +1551,6 @@ paths:
             summary: Get All Model Details
             description: Get information of all models in an account, irrespective of the type of model (OCR model or Image Classification model).
             operationId: ic/model/all
-            parameters:
-                - name: id
-                  in: query
-                  description: |
-                      The ID of the model on which the operation is to be performed. It can be found in the model settings.
-                      <br />
-                      **Eg**: `0a0aa000-0000-0a0-aa00-000a0000000a`
-                  required: true
-                  schema:
-                      type: string
             responses:
                 "200":
                     $ref: "#/components/responses/modelObject"
