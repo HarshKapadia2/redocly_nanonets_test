@@ -235,12 +235,7 @@ paths:
                                         <br />
                                         **NOTE**: The `filename` must be the same as the uploaded file name.
                                 file:
-                                    type: string
-                                    format: binary
-                                    description: |
-                                        The file to be uploaded.
-                                        <br />
-                                        **Format**: PNG, JPEG or PDF
+                                    $ref: "#/components/schemas/file"
                         encoding:
                             file:
                                 contentType: image/png, image/jpeg, application/pdf
@@ -1818,7 +1813,240 @@ paths:
                         .build();
 
                       Response response = client.newCall(request).execute();
+    /ImageCategorization/UploadFile:
+        post:
+            tags:
+                - icUpload
+            summary: Upload Training Images by File
+            description: |
+                Upload a training image to the specified model using a locally stored file.
+                On successful upload, model information along with the total number of images per category will be received.
+                <br />
+                **NOTE**: Batch file uploads are not supported by this end point.
+            operationId: ic/upload/file
+            requestBody:
+                description: The parameters to be sent in the request's body.
+                content:
+                    application/json:
+                        schema:
+                            required:
+                                - modelId
+                                - category
+                                - file
+                            properties:
+                                modelId:
+                                    type: string
+                                    description: |
+                                        The ID of the model on which the operation is to be performed.
+                                        It can be found in the model settings.
+                                        <br />
+                                        **Eg**: `0a0aa000-0000-0a0-aa00-000a0000000a`
+                                category:
+                                    type: string
+                                    description: TBD
+                                file:
+                                    $ref: "#/components/schemas/file"
+                        encoding:
+                            file:
+                                contentType: image/png, image/jpeg, application/pdf
+                required: true
+            responses:
+                "200":
+                    $ref: "#/components/responses/modelObject"
+                "400":
+                    description: |
+                        Zero or one category in the request body.
+                        Add two or more categories in the `category` parameter.
+                    x-summary: BAD REQUEST
+                "401":
+                    $ref: "#/components/responses/unauthorized"
+                "402":
+                    $ref: "#/components/responses/paymentRequired"
+            deprecated: false
+            x-codeSamples:
+                - lang: JavaScript
+                  label: Node.js
+                  source: >
+                      var request = require('request')
+
+                      var fs = require('fs')
+
+                      const form_data = {'modelId' : 'REPLACE_MODEL_ID', 'category': 'category1', 'file': fs.createReadStream('REPLACE_IMAGE_PATH.jpg')}
+
+                      const options = {
+                          url : 'https://app.nanonets.com/api/v2/ImageCategorization/UploadFile/',
+                          formData: form_data,
+                          headers: {
+                              'Authorization' : 'Basic ' + Buffer.from('[[.ApiKey]]' + ':').toString('base64')
+                          }
+                      }
+
+                      request.post(options, function(err, httpResponse, body) {
+
+                        console.log(body)
+                      });
+                - lang: Python
+                  label: Python
+                  source: |
+                      import requests
+
+
+                      url = 'https://app.nanonets.com/api/v2/ImageCategorization/UploadFile/'
+
+
+                      data = {'file' :open('REPLACE_IMAGE_PATH.jpg', 'rb'),'category' :('', 'category1'), 'modelId' :('', 'REPLACE_MODEL_ID')}
+
+
+                      response = requests.post(url, auth= requests.auth.HTTPBasicAuth('[[.ApiKey]]', ''), files=data)
+                      print(response.text)
+                - lang: Shell
+                  label: CLI
+                  source: |
+                      curl --request POST \
+                        --url 'https://app.nanonets.com/api/v2/ImageCategorization/UploadFile/' \
+                        --header 'accept: multipart/form-data' \
+                        -u '[[.ApiKey]]' \
+                        -F 'category=category1' \
+                        -F 'modelId=REPLACE_MODEL_ID' \
+                        -F 'file=@REPLACE_IMAGE_PATH.jpg'
+                - lang: Go
+                  label: Go
+                  source: |
+                      package main
+
+
+                      import (
+                          "bytes"
+                          "fmt"
+                          "io"
+                          "io/ioutil"
+                          "mime/multipart"
+                          "net/http"
+                          "os"
+                          "path/filepath"
+                      )
+
+
+                      func main() {
+                          url := "https://app.nanonets.com/api/v2/ImageCategorization/UploadFile/"
+                          file, err := os.Open("REPLACE_IMAGE_PATH.jpg")
+                          if err != nil {
+                              fmt.Println(err)
+                              return
+                          }
+                          defer file.Close()
+
+
+                          body := &bytes.Buffer{}
+                          writer := multipart.NewWriter(body)
+                          part, err := writer.CreateFormFile("file", filepath.Base("REPLACE_IMAGE_PATH.jpg"))
+                          if err != nil {
+                              fmt.Println(err)
+                              return
+                          }
+
+                          _, err = io.Copy(part, file)
+                          if err != nil {
+                              fmt.Println(err)
+                              return
+                          }
+
+
+                          writer.WriteField("category", "category1")
+                          writer.WriteField("modelId", "REPLACE_MODEL_ID")
+                          contentType := writer.FormDataContentType()
+                          err = writer.Close()
+                          if err != nil {
+                              fmt.Println(err)
+                              return
+                          }
+                          req, _ := http.NewRequest("POST", url, body)
+                          req.Header.Add("Content-Type", contentType)
+                          req.SetBasicAuth("[[.ApiKey]]", "")
+
+
+                          res, _ := http.DefaultClient.Do(req)
+                          defer res.Body.Close()
+                          output, _ := ioutil.ReadAll(res.Body)
+                          fmt.Println(res)
+                          fmt.Println(string(output))
+                      }
+                - lang: Ruby
+                  label: Ruby
+                  source: >
+                      require 'uri'
+                      require 'net/http'
+                      require 'net/http/post/multipart'
+
+                      url = URI('https://app.nanonets.com/api/v2/ImageCategorization/UploadFile/')
+
+                      http = Net::HTTP.new(url.host, url.port)
+                      http.use_ssl = true
+
+                      File.open('REPLACE_IMAGE_PATH.jpg') do |jpg|
+                        request = Net::HTTP::Post::Multipart.new(url.path,
+                          'file' => UploadIO.new(jpg, 'image/jpeg', 'REPLACE_IMAGE_PATH.jpg')
+                          'modelId' => 'REPLACE_MODEL_ID',
+                          'category' => 'category1')
+                        request.basic_auth '[[.ApiKey]]', ''
+                        response = Net::HTTP.start(url.host, url.port) do |http|
+                          http.request(request)
+                        end
+                        puts response.read_body
+                      end
+                - lang: C#
+                  label: C#
+                  source: >
+                      var client = new
+                      RestClient("https://app.nanonets.com/api/v2/ImageCategorization/UploadFile/");
+
+                      var request = new RestRequest(Method.POST);
+
+                      request.AddHeader("authorization", "Basic " +
+                      Convert.ToBase64String(Encoding.Default.GetBytes("[[.ApiKey]]:")));
+
+                      request.AddHeader("accept", "Multipart/form-data");
+
+                      request.AddParameter("modelId", "REPLACE_MODEL_ID");
+
+                      request.AddParameter("category", "category1");
+
+                      request.AddFile("file", "REPLACE_IMAGE_PATH.jpg");
+
+                      IRestResponse response = client.Execute(request);
+                - lang: Java
+                  label: Java
+                  source: >
+                      private static final MediaType MEDIA_TYPE_JPG =
+                      MediaType.parse("image/jpeg");
+
+
+                      OkHttpClient client = new OkHttpClient();
+
+
+                      RequestBody requestBody = new MultipartBody.Builder()
+                              .setType(MultipartBody.FORM)
+                              .addFormDataPart("modelId", "REPLACE_MODEL_ID")
+                              .addFormDataPart("category", "category1")
+                              .addFormDataPart("file", "REPLACE_IMAGE_PATH.jpg", RequestBody.create(MEDIA_TYPE_JPG, new File("REPLACE_IMAGE_PATH.jpg")))
+                              .build();
+
+                      request = new Request.Builder()
+                              .url("https://app.nanonets.com/api/v2/ImageCategorization/UploadFile/")
+                              .post(requestBody)
+                              .addHeader("Authorization", Credentials.basic("[[.ApiKey]]", ""))
+                              .build();
+
+                      Response response = client.newCall(request).execute();
 components:
+    schemas:
+        file:
+            type: string
+            format: binary
+            description: |
+                The file to be uploaded.
+                <br />
+                **Format**: PNG, JPEG or PDF
     responses:
         modelObject:
             description: Request successful.
@@ -2031,7 +2259,8 @@ components:
             name: model_id
             in: path
             description: |
-                The ID of the model on which the operation is to be performed. It can be found in the model settings.
+                The ID of the model on which the operation is to be performed.
+                It can be found in the model settings.
                 <br />
                 **Eg**: `0a0aa000-0000-0a0-aa00-000a0000000a`
             required: true
