@@ -4,17 +4,17 @@ info:
     description: NanoNets' API Reference.
     contact:
         name: NanoNets Support
-        url: nanonets.com
+        url: "https://nanonets.com"
         email: support@nanonets.com
     license:
         name: MIT
-        url: https://mit-license.org
+        url: "https://mit-license.org"
     version: 2.0.0
     x-logo:
-        url: https://nanonets.com/logo2.png
+        url: "https://nanonets.com/logo2.png"
         altText: NanoNets
 servers:
-    - url: https://app.nanonets.com/api/v2
+    - url: "https://app.nanonets.com/api/v2"
       description: "test"
 paths:
     /OCR/Model/{model_id}:
@@ -23,7 +23,7 @@ paths:
                 - ocrModelDetails
             summary: Get Model Details by ID
             description: Retrieve a specific model's details given its ID.
-            operationId: ocr/model/id
+            operationId: "ocr/model/id"
             parameters:
                 - $ref: "#/components/parameters/modelId"
             responses:
@@ -115,8 +115,8 @@ paths:
                       response = http.request(request)
 
                       puts response.read_body
-                - lang: C#
-                  label: C#
+                - lang: "C#"
+                  label: "C#"
                   source: >
                       var client = new RestClient("https://app.nanonets.com/api/v2/OCR/Model/" + {{model_id}});
 
@@ -146,7 +146,7 @@ paths:
                 Upload training images to a model using image URLs.
                 Multiple images can be uploaded in the same request by adding more URLs in the `urls` array.
                 On successful upload, model information along with the total number of images per category will be received.
-            operationId: ocr/upload/url
+            operationId: "ocr/upload/url"
             parameters:
                 - $ref: "#/components/parameters/contentType"
                 - $ref: "#/components/parameters/modelId"
@@ -179,7 +179,7 @@ paths:
                           body: JSON.stringify(form_data),
                           headers: {
                               'Authorization' : 'Basic ' + Buffer.from('[[.ApiKey]]' + ':').toString('base64'),
-                              'Content-Type': "application/json"
+                              'Content-Type': ""application/json""
                           }
                       }
 
@@ -196,7 +196,7 @@ paths:
 
                       payload = "{\"data\": [{\"filename\":\"https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg\", \"object\": [{\"name\":\"category1\", \"ocr_text\":\"text inside the bounding box\", \"bndbox\": {\"xmin\": 1,\"ymin\": 1,\"xmax\": 100, \"ymax\": 100}}, {\"name\":\"category2\", \"bndbox\": {\"xmin\": 1,\"ymin\": 1,\"xmax\": 100, \"ymax\": 100}}]}], \"urls\": [\"https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg\"]}"
                       headers = {
-                          'Content-Type': "application/json"
+                          'Content-Type': ""application/json""
                       }
 
                       response = requests.request("POST", url, auth=requests.auth.HTTPBasicAuth('[[.ApiKey]]', ''), data=payload, headers=headers)
@@ -208,7 +208,7 @@ paths:
                       curl --request POST \
                           --url https://app.nanonets.com/api/v2/OCR/Model/{model_id}/UploadUrls/ \
                           -u '[[.ApiKey]]' \
-                          -H 'Content-Type: application/json' \
+                          -H 'Content-Type: "application/json"' \
                           --data '{"data": [{"filename":"https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg", "object": [{"name":"category1", "ocr_text":"text inside the bounding box", "bndbox": {"xmin": 1,"ymin": 1,"xmax": 100, "ymax": 100}}, {"name":"category2", "bndbox": {"xmin": 1,"ymin": 1,"xmax": 100, "ymax": 100}}]}], "urls": ["https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg"]}'
                 - lang: Go
                   label: Go
@@ -230,7 +230,7 @@ paths:
 
                           req, _ := http.NewRequest("POST", url, payload)
 
-                          req.Header.Add("Content-Type", "application/json")
+                          req.Header.Add("Content-Type", ""application/json"")
                           req.SetBasicAuth("[[.ApiKey]]", "")
 
                           res, _ := http.DefaultClient.Do(req)
@@ -254,14 +254,14 @@ paths:
                       http.use_ssl = true
 
                       request = Net::HTTP::Post.new(url)
-                      request["Content-Type"] = 'application/json'
+                      request["Content-Type"] = '"application/json"'
                       request.basic_auth '[[.ApiKey]]', ''
                       request.body = "{\"data\": [{\"filename\":\"https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg\", \"object\": [{\"name\":\"category1\", \"ocr_text\":\"text inside the bounding box\", \"bndbox\": {\"xmin\": 1,\"ymin\": 1,\"xmax\": 100, \"ymax\": 100}}, {\"name\":\"category2\", \"bndbox\": {\"xmin\": 1,\"ymin\": 1,\"xmax\": 100, \"ymax\": 100}}]}], \"urls\": [\"https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg\"]}"
 
                       response = http.request(request)
                       puts response.read_body"
-                - lang: C#
-                  label: C#
+                - lang: "C#"
+                  label: "C#"
                   source: >
                       var client = new
                       RestClient("https://app.nanonets.com/api/v2/OCR/Model/REPLACE_MODEL_ID/UploadUrls/");
@@ -270,7 +270,7 @@ paths:
 
                       request.AddHeader("authorization", "Basic [[.ApiKey]]");
 
-                      request.AddHeader("Content-Type", "application/json");
+                      request.AddHeader("Content-Type", ""application/json"");
 
                       request.AddParameter("undefined", "
                       {"data": [{"filename":"https://nanonets.s3-us-west-2.amazonaws.com/test-images/test1.jpg", "object":
@@ -288,7 +288,7 @@ paths:
 
 
                       MediaType mediaType =
-                      MediaType.parse("application/json");
+                      MediaType.parse(""application/json"");
 
                       RequestBody body = RequestBody.create(mediaType, "
 
@@ -301,7 +301,7 @@ paths:
                       Request request = new Request.Builder()
                         .url("https://app.nanonets.com/api/v2/OCR/Model/REPLACE_MODEL_ID/UploadUrls/")
                         .post(body)
-                        .addHeader("Content-Type", "application/json")
+                        .addHeader("Content-Type", ""application/json"")
                         .addHeader("Authorization", Credentials.basic("[[.ApiKey]]", ""))
                         .build();
 
@@ -317,13 +317,13 @@ paths:
                 <br />
                 <br />
                 **NOTE**: Batch file uploads are not supported by this end point.
-            operationId: ocr/upload/file
+            operationId: "ocr/upload/file"
             parameters:
                 - $ref: "#/components/parameters/modelId"
             requestBody:
                 description: The parameters to be sent in the request's body.
                 content:
-                    application/json:
+                    "application/json":
                         schema:
                             type: object
                             required:
@@ -342,7 +342,7 @@ paths:
                                     $ref: "#/components/schemas/file"
                         encoding:
                             file:
-                                contentType: image/png, image/jpeg, application/pdf
+                                contentType: "image/png, image/jpeg, application/pdf"
                 required: true
             responses:
                 "200":
@@ -493,8 +493,8 @@ paths:
                         end
                         puts response.read_body
                       end
-                - lang: C#
-                  label: C#
+                - lang: "C#"
+                  label: "C#"
                   source: |
                       var client = new RestClient("https://app.nanonets.com/api/v2/OCR/UploadFile/");
                       var request = new RestRequest(Method.POST);
@@ -531,14 +531,14 @@ paths:
             description: |
                 Train a model after uploading files to the model.
                 The same end point is to be used to re-train a model after uploading more files to improve the model.
-            operationId: ocr/train
+            operationId: "ocr/train"
             parameters:
                 - $ref: "#/components/parameters/modelId"
             responses:
                 "200":
                     description: Request successful.
                     content:
-                        application/json:
+                        "application/json":
                             schema:
                                 type: object
                             examples:
@@ -642,8 +642,8 @@ paths:
 
                       response = http.request(request)
                       puts response.read_body
-                - lang: C#
-                  label: C#
+                - lang: "C#"
+                  label: "C#"
                   source: >
                       var client = new
                       RestClient("https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/Train/");
@@ -671,7 +671,7 @@ paths:
                 - ocrPredict
             summary: Get All Prediction Files
             description: Retrieve the files that have been processed by the prediction end points.
-            operationId: ocr/predict/getFile
+            operationId: "ocr/predict/getFile"
             parameters:
                 - $ref: "#/components/parameters/modelId"
                 - name: start_day_interval
@@ -702,7 +702,7 @@ paths:
                 "200":
                     description: Image object.
                     content:
-                        application/json:
+                        "application/json":
                             schema:
                                 type: object
                             examples:
@@ -830,8 +830,8 @@ paths:
                       response = http.request(request)
 
                       puts response.read_body
-                - lang: C#
-                  label: C#
+                - lang: "C#"
+                  label: "C#"
                   source: >
                       var client = new RestClient("https://app.nanonets.com/api/v2/Inferences/Model/{{model_id}}/ImageLevelInferences?start_day_interval={start_day}&current_batch_day={end_day}");
 
@@ -858,7 +858,7 @@ paths:
                 - ocrPredict
             summary: Get Prediction File by ID
             description: Retrieve the prediction results of a particular file by its ID.
-            operationId: ocr/predict/id
+            operationId: "ocr/predict/id"
             parameters:
                 - $ref: "#/components/parameters/modelId"
                 - name: id
@@ -961,8 +961,8 @@ paths:
                       response = http.request(request)
 
                       puts response.read_body
-                - lang: C#
-                  label: C#
+                - lang: "C#"
+                  label: "C#"
                   source: >
                       var client = new RestClient("https://app.nanonets.com/api/v2/Inferences/Model/{{model_id}}/ImageLevelInferences/{{id}}");
 
@@ -989,7 +989,7 @@ paths:
                 - ocrPredict
             summary: Prediction for Image Files
             description: Given an image file, extract data as per the label(s) specified in the model.
-            operationId: ocr/predict/file
+            operationId: "ocr/predict/file"
             parameters:
                 - $ref: "#/components/parameters/modelId"
             requestBody:
@@ -1132,8 +1132,8 @@ paths:
                       end
                       puts response.read_body
                       end
-                - lang: C#
-                  label: C#
+                - lang: "C#"
+                  label: "C#"
                   source: |
                       var client = new RestClient("https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelFile/");
                       var request = new RestRequest(Method.POST);
@@ -1169,7 +1169,7 @@ paths:
             description: |
                 Given an image file, extract data as per the label(s) specified in the model, <u>asynchronously</u>.
                 This end point will send back a response as soon as the file has been uploaded, with a file ID. To retrieve the extracted data from the uploaded file, please use this file ID and hit the [Get Prediction File by ID](#operation/ocr/predict/id) end point.
-            operationId: ocr/predict/file/async
+            operationId: "ocr/predict/file/async"
             parameters:
                 - $ref: "#/components/parameters/modelId"
                 - $ref: "#/components/parameters/async"
@@ -1313,8 +1313,8 @@ paths:
                       end
                       puts response.read_body
                       end
-                - lang: C#
-                  label: C#
+                - lang: "C#"
+                  label: "C#"
                   source: |
                       var client = new RestClient("https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelFile/?async=true");
                       var request = new RestRequest(Method.POST);
@@ -1350,7 +1350,7 @@ paths:
             description: |
                 Given image URL(s), extract data as per the label(s) specified in the model.
                 Multiple image URLs per request are allowed.
-            operationId: ocr/predict/url
+            operationId: "ocr/predict/url"
             parameters:
                 - $ref: "#/components/parameters/modelId"
             requestBody:
@@ -1469,8 +1469,8 @@ paths:
 
                       response = http.request(request)
                       puts response.read_body
-                - lang: C#
-                  label: C#
+                - lang: "C#"
+                  label: "C#"
                   source: |
                       var client = new RestClient("https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelUrls/");
                       var request = new RestRequest(Method.POST);
@@ -1501,7 +1501,7 @@ paths:
             description: |
                 Given image URL(s), extract data as per the label(s) specified in the model, <u>asynchronously</u>.
                 This end point will send back a response as soon as the file has been uploaded, with a file ID. To retrieve the extracted data from the uploaded file, please use this file ID and hit the [Get Prediction File by ID](#operation/ocr/predict/id) end point.
-            operationId: ocr/predict/url/async
+            operationId: "ocr/predict/url/async"
             parameters:
                 - $ref: "#/components/parameters/modelId"
                 - $ref: "#/components/parameters/async"
@@ -1619,8 +1619,8 @@ paths:
 
                       response = http.request(request)
                       puts response.read_body
-                - lang: C#
-                  label: C#
+                - lang: "C#"
+                  label: "C#"
                   source: |
                       var client = new RestClient("https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelUrls/?async=true");
                       var request = new RestRequest(Method.POST);
@@ -1649,7 +1649,7 @@ paths:
                 - icModelDetails
             summary: Get All Model Details
             description: Get information of all models in an account, irrespective of the type of model (OCR model or Image Classification model).
-            operationId: ic/model/all
+            operationId: "ic/model/all"
             responses:
                 "200":
                     $ref: "#/components/responses/modelObject"
@@ -1750,8 +1750,8 @@ paths:
                       response = http.request(request)
 
                       puts response.read_body
-                - lang: C#
-                  label: C#
+                - lang: "C#"
+                  label: "C#"
                   source: >
                       var client = new
                       RestClient("https://app.nanonets.com/api/v2/ImageCategorization/Models/");
@@ -1779,7 +1779,7 @@ paths:
                 - icModelDetails
             summary: Get Model Details by ID
             description: Retrieve a specific model's details given its ID.
-            operationId: ic/model/id
+            operationId: "ic/model/id"
             parameters:
                 - name: id
                   in: query
@@ -1895,8 +1895,8 @@ paths:
                       response = http.request(request)
 
                       puts response.read_body
-                - lang: C#
-                  label: C#
+                - lang: "C#"
+                  label: "C#"
                   source: >
                       var client = new RestClient("https://app.nanonets.com/api/v2/ImageCategorization/Model/?id=REPLACE_MODEL_ID");
 
@@ -1927,11 +1927,11 @@ paths:
                 On successful upload, model information along with the total number of images per category will be received.
                 <br />
                 **NOTE**: Batch file uploads are not supported by this end point.
-            operationId: ic/upload/file
+            operationId: "ic/upload/file"
             requestBody:
                 description: The parameters to be sent in the request's body.
                 content:
-                    application/json:
+                    "application/json":
                         schema:
                             required:
                                 - modelId
@@ -2098,8 +2098,8 @@ paths:
                         end
                         puts response.read_body
                       end
-                - lang: C#
-                  label: C#
+                - lang: "C#"
+                  label: "C#"
                   source: >
                       var client = new
                       RestClient("https://app.nanonets.com/api/v2/ImageCategorization/UploadFile/");
@@ -2155,7 +2155,7 @@ components:
         modelObject:
             description: Request successful.
             content:
-                application/json:
+                "application/json":
                     schema:
                         type: object
                     examples:
@@ -2176,7 +2176,7 @@ components:
         ok:
             description: Request successful.
             content:
-                application/json:
+                "application/json":
                     schema:
                         type: object
                     examples:
@@ -2214,7 +2214,7 @@ components:
         okPrediction:
             description: Request successful.
             content:
-                application/json:
+                "application/json":
                     schema:
                         type: object
                     examples:
@@ -2297,7 +2297,7 @@ components:
                 - `pending`: The file is in the queue and will be processed.
                 - `failure`: There was an issue while processing the file. It has been re-tried three times. It is recommended to re-upload the file and if the issue persists, please [contact support](mailto:support@nanonets.com).
             content:
-                application/json:
+                "application/json":
                     schema:
                         type: object
                     examples:
@@ -2355,7 +2355,7 @@ components:
             description: |
                 Set the ['Content-Type' header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type) value.
                 <br />
-                **Eg**: `"Content-Type": "application/json"`
+                **Eg**: `"Content-Type": ""application/json""`
             required: true
             schema:
                 type: string
@@ -2384,7 +2384,7 @@ components:
         file:
             description: The parameters to be sent in the request's body.
             content:
-                application/json:
+                "application/json":
                     schema:
                         type: object
                         required:
@@ -2404,7 +2404,7 @@ components:
         urls:
             description: The parameters to be sent in the request's body.
             content:
-                application/json:
+                "application/json":
                     schema:
                         required:
                             - urls
