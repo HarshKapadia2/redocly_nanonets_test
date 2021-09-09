@@ -1161,7 +1161,7 @@ paths:
                               .build();
 
                       Response response = client.newCall(request).execute();
-    /OCR/Model/{model_id}/LabelFile‎: # There is an empty character (https://emptycharacter.com) at the end of this path's name, which uniquely differentiates it from the other path with the same name.
+    /OCR/Model/{model_id}/LabelFile/:
         post:
             tags:
                 - ocrPredict
@@ -1493,7 +1493,7 @@ paths:
                           .build();
 
                       Response response = client.newCall(request).execute();
-    /OCR/Model/{model_id}/LabelUrls‎: # There is an empty character (https://emptycharacter.com) at the end of this path's name, which uniquely differentiates it from the other path with the same name.
+    /OCR/Model/{model_id}/LabelUrls/:
         post:
             tags:
                 - ocrPredict
@@ -2434,7 +2434,7 @@ components:
 
 
                 All API requests must be made over HTTPS. Calls made over plain HTTP will fail. API requests without authentication will also fail.
-            scheme: Basic
+            scheme: basic
 security:
     - basicAuth: []
 tags:

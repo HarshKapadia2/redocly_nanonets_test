@@ -1,19 +1,14 @@
-# See https://redoc.ly/docs/cli/configuration/ for more information.
 apiDefinitions:
-  main: nanonets_openapi.yaml
+    main: nanonets_openapi.yaml
 lint:
-  extends:
-    - recommended
-  rules:
-    no-unused-components: warning
+    extends:
+        - recommended
+    rules:
+        no-unused-components: warning
 referenceDocs:
-  htmlTemplate: ./index.html
-  theme:
-    colors:
-      primary:
-        main: "#32329f"
-  generateCodeSamples:
-    languages:  # Array of language config objects; indicates in which languages to generate code samples.
-      - lang: curl # Can be one of the following supported languages: "curl", "Node.js", "JavaScript".
-      - lang: "Node.js"
-      - lang: "JavaScript"
+    corsProxyUrl: "https://cors.redoc.ly"
+    htmlTemplate: ./index.html
+    theme:
+        colors:
+            primary:
+                main: "#32329f"
