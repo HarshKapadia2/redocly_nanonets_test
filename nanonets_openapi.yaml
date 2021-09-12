@@ -141,7 +141,7 @@ paths:
         post:
             tags:
                 - ocrUpload
-            summary: Upload Training Images by URL
+            summary: Upload Training Images by URLs
             description: |
                 Upload training images to a model using image URLs.
                 Multiple images can be uploaded in the same request by adding more URLs in the `urls` array.
@@ -1288,7 +1288,7 @@ paths:
         post:
             tags:
                 - ocrPredict
-            summary: Prediction for Image Files
+            summary: Prediction for Image File
             description: Given an image file, extract data as per the label(s) specified in the model.
             operationId: "ocr/predict/file"
             parameters:
@@ -1466,7 +1466,7 @@ paths:
         post:
             tags:
                 - ocrPredict
-            summary: Async Prediction for Image Files
+            summary: Async Prediction for Image File
             description: |
                 Given an image file, extract data as per the label(s) specified in the model, <u>asynchronously</u>.
                 This end point will send back a response as soon as the file has been uploaded, with a file ID. To retrieve the extracted data from the uploaded file, please use this file ID and hit the [Get Prediction File by ID](#operation/ocr/predict/id) end point.
@@ -1921,7 +1921,7 @@ paths:
         post:
             tags:
                 - icUpload
-            summary: Upload Training Images by URL
+            summary: Upload Training Images by URLs
             description: |
                 Upload training images to a model using image URLs.
                 Multiple images can be uploaded in the same request by adding more URLs in the `urls` array.
@@ -2496,7 +2496,6 @@ paths:
                 Multiple image URLs per request are allowed.
             operationId: "ic/predict/url"
             requestBody:
-                requestBody:
                 description: The parameters to be sent in the request's body.
                 content:
                     "application/json":
