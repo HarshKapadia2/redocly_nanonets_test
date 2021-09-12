@@ -7,7 +7,7 @@ lint:
         no-unused-components: warning
 referenceDocs:
     corsProxyUrl: "https://cors.redoc.ly"
-    htmlTemplate: ./index.html
+    htmlTemplate: index.html
     theme:
         colors:
             primary:
