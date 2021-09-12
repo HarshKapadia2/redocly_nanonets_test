@@ -2143,15 +2143,9 @@ paths:
                                 - file
                             properties:
                                 modelId:
-                                    type: string
-                                    description: |
-                                        The ID of the model on which the operation is to be performed.
-                                        It can be found in the model settings.
-                                        <br />
-                                        **Eg**: `0a0aa000-0000-0a0-aa00-000a0000000a`
+                                    $ref: "#/components/schemas/modelId"
                                 category:
-                                    type: string
-                                    description: TBD
+                                    $ref: "#/components/schemas/category"
                                 file:
                                     $ref: "#/components/schemas/file"
                         encoding:
