@@ -2490,7 +2490,7 @@ paths:
         post:
             tags:
                 - icPredict
-            summary: Prediction for Image URL
+            summary: Prediction for Image URLs
             description: |
                 Given image URL(s), extract data as per the label(s) specified in the model.
                 Multiple image URLs per request are allowed.
