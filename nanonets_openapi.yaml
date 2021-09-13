@@ -15,7 +15,7 @@ info:
         altText: NanoNets
 servers:
     - url: "https://app.nanonets.com/api/v2"
-      description: "test"
+      description: "NanoNets API v2"
 paths:
     /OCR/Model/{model_id}:
         get:
