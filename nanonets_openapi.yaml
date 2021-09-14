@@ -3173,46 +3173,87 @@ components:
     securitySchemes:
         basicAuth:
             type: http
-            description: >
-                When you sign up for an account, you are given your first API key.
-                To do so please [follow this link.](https://app.nanonets.com/#keys)
+            description: |
+                The [Basic HTTP Authentication Scheme](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#basic_authentication_scheme) is used for authorization through the [Authorization header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization).
+                <br />
+                <br />
+                The Basic scheme consists of a username and password encoded using the [Base64 Encoding Scheme](https://developer.mozilla.org/en-US/docs/Glossary/Base64) in a particular format.
+                <br />
+                <br />
+                **Format**: `Authorization: "Basic <base64_string>"`
+                - **Eg**: `Authorization: "Basic MGEwYWEwMDAtMDtYGE6"`
+                - For the `base64_string`, please encode the string `<username>:<password>` using the [Base64 Encoding Scheme](https://developer.mozilla.org/en-US/docs/Glossary/Base64).
+                  - The `username` is the API Key. ([Get an API Key](https://app.nanonets.com/#/keys))
+                  - For the `password`
+                    - **For the 'Try it' console**: A random string. Eg: `testPassword`
+                    - **For API requests**:
+                      - There is no password, please leave it blank.
+                      - So the `<username>:<password>` format is `<api_key>:`, which needs to be Base64 encoded to get the `base64_string`.
+                        
+                        **NOTE**: the colon (`:`) after the API key in `<api_key>:` needs to be Base64 encoded as well.
 
-
-                Also you can generate additional API keys, and delete API keys (as you may need to rotate your keys in the future).
-                NanoNets expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-
-                <span style="color:red">Authorization: [[.ApiKey]]</span>
-
-
-                All API requests must be made over HTTPS. Calls made over plain HTTP will fail. API requests without authentication will also fail.
+                **NOTE**:
+                - All API requests must be made over HTTPS only. HTTP calls will fail.
+                - All API requests must have the `Authorization` header.
+                <br />
+                <br />
             scheme: basic
 security:
     - basicAuth: []
 tags:
     - name: ocrModelDetails
-      description: "test"
+      description: |
+          Get the details of an existing Optical Character Recognition (OCR) model.
+          <br />
+          ([Create a model](https://app.nanonets.com) on the NanoNets web app.)
       x-displayName: OCR Model Details
     - name: ocrUpload
-      description: "test"
+      description: |
+          Upload training images to an existing Optical Character Recognition (OCR) model.
+          <br />
+          ([Create a model](https://app.nanonets.com) on the NanoNets web app.)
+          <br />
+          <br />
+          **NOTE**: These end points are only for uploading **training files** for the model and the same files cannot be directly used for prediction. (They need to be uploaded again through the [prediction end points](#tag/ocrPredict) for prediction.)
       x-displayName: OCR Upload
     - name: ocrTrain
-      description: "test"
+      description: |
+          Train an existing Optical Character Recognition (OCR) model.
+          <br />
+          ([Create a model](https://app.nanonets.com) on the NanoNets web app.)
       x-displayName: OCR Train
     - name: ocrPredict
-      description: "test"
+      description: |
+          Upload a file to an existing Optical Character Recognition (OCR) model and get the extracted data.
+          <br />
+          ([Create a model](https://app.nanonets.com) on the NanoNets web app.)
       x-displayName: OCR Predict
     - name: icModelDetails
-      description: "test"
+      description: |
+          Get the details of an existing Image Classification (IC) model.
+          <br />
+          ([Create a model](https://app.nanonets.com) on the NanoNets web app.)
       x-displayName: IC Model Details
     - name: icUpload
-      description: "test"
+      description: |
+          Upload training images to an existing Image Classification (IC) model.
+          <br />
+          ([Create a model](https://app.nanonets.com) on the NanoNets web app.)
+          <br />
+          <br />
+          **NOTE**: These end points are only for uploading **training files** for the model and the same files cannot be directly used for prediction. (They need to be uploaded again through the [prediction end points](#tag/icPredict) for prediction.)
       x-displayName: IC Upload
     - name: icTrain
-      description: "test"
+      description: |
+          Train an existing Image Classification (IC) model.
+          <br />
+          ([Create a model](https://app.nanonets.com) on the NanoNets web app.)
       x-displayName: IC Train
     - name: icPredict
-      description: "test"
+      description: |
+          Upload a file to an existing Image Classification (IC) model and get the predicted classification result.
+          <br />
+          ([Create a model](https://app.nanonets.com) on the NanoNets web app.)
       x-displayName: IC Predict
 x-tagGroups:
     - name: Optical Character Recognition (OCR)
