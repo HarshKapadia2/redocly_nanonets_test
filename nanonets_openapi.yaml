@@ -2349,17 +2349,17 @@ paths:
                 Train a model after uploading files to the model.
                 The same end point is to be used to re-train a model after uploading more files to improve the model.
             operationId: "ic/train"
-            requestBody:
-                description: The parameters to be sent in the request's body.
-                content:
-                    "application/json":
-                        schema:
-                            type: object
-                            required:
-                                - modelId
-                            properties:
-                                modelId:
-                                    $ref: "#/components/schemas/modelId"
+            parameters:
+                - name: modelId
+                  in: query
+                  description: |
+                      The ID of the model on which the operation is to be performed.
+                      It can be found in the model settings.
+                      <br />
+                      **Eg**: `0a0aa000-0000-0a0-aa00-000a0000000a`
+                  required: true
+                  schema:
+                      type: string
             responses:
                 "200":
                     $ref: "#/components/responses/modelObject"
@@ -2379,16 +2379,10 @@ paths:
                   source: >
                       var request = require('request')
 
-                      var querystring = require('querystring')
-
-                      const form_data = {'modelId' : 'REPLACE_MODEL_ID'}
-
                       const options = {
-                          url : 'https://app.nanonets.com/api/v2/ImageCategorization/Train/',
-                          body: querystring.stringify(form_data),
+                          url : `https://app.nanonets.com/api/v2/ImageCategorization/Train/?modelId=REPLACE_MODEL_ID`,
                           headers: {
                               'Authorization' : 'Basic ' + Buffer.from('[[.ApiKey]]' + ':').toString('base64'),
-                              'Content-Type': 'application/x-www-form-urlencoded'
                           }
                       }
 
