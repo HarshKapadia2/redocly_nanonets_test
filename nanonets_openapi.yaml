@@ -562,7 +562,8 @@ paths:
                 "401":
                     $ref: "#/components/responses/unauthorized"
                 "402":
-                    $ref: "#/components/responses/paymentRequired"
+                    description: This feature is only supported for paid models. ([Pricing](https://nanonets.com/pricing))
+                    x-summary: PAYMENT REQUIRED
                 "404":
                     $ref: "#/components/responses/notFound"
             deprecated: false
