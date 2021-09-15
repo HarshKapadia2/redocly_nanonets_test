@@ -323,7 +323,7 @@ paths:
             requestBody:
                 description: The parameters to be sent in the request's body.
                 content:
-                    "application/json":
+                    "application/form-data":
                         schema:
                             type: object
                             required:
@@ -1930,7 +1930,7 @@ paths:
             requestBody:
                 description: The parameters to be sent in the request's body.
                 content:
-                    "application/json":
+                    "application/x-www-form-urlencoded":
                         schema:
                             type: object
                             required:
@@ -2135,7 +2135,7 @@ paths:
             requestBody:
                 description: The parameters to be sent in the request's body.
                 content:
-                    "application/json":
+                    "application/form-data":
                         schema:
                             required:
                                 - modelId
@@ -2498,7 +2498,7 @@ paths:
             requestBody:
                 description: The parameters to be sent in the request's body.
                 content:
-                    "application/json":
+                    "application/x-www-form-urlencoded":
                         schema:
                             type: object
                             required:
@@ -2675,7 +2675,7 @@ paths:
             requestBody:
                 description: The parameters to be sent in the request's body.
                 content:
-                    "application/json":
+                    "application/form-data":
                         schema:
                             type: object
                             required:
@@ -3136,7 +3136,7 @@ components:
         file:
             description: The parameters to be sent in the request's body.
             content:
-                "application/json":
+                "application/form-data":
                     schema:
                         type: object
                         required:
@@ -3156,7 +3156,7 @@ components:
         urls:
             description: The parameters to be sent in the request's body.
             content:
-                "application/json":
+                "application/x-www-form-urlencoded":
                     schema:
                         required:
                             - urls
