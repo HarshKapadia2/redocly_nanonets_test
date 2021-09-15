@@ -10,5 +10,8 @@ referenceDocs:
     htmlTemplate: index.html
     theme:
         colors:
+            http:
+                post: "#546fff"
             primary:
-                main: "#32329f"
+                contrastText: "#fff"
+                main: "#546fff"
