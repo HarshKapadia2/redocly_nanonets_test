@@ -2884,9 +2884,7 @@ components:
             type: string
             description: TBD
         urls:
-            type: array
-            items:
-                type: string
+            type: string
             description: |
                 Array of URL(s) of the training file(s).
                 <br />
@@ -3157,9 +3155,7 @@ components:
                             - urls
                         properties:
                             urls:
-                                type: array
-                                items:
-                                    type: string
+                                type: string
                                 description: |
                                     Array of URL(s) of the training file(s).
                                     <br />
