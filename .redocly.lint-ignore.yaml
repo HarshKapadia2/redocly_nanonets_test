@@ -1,0 +1,4 @@
+nanonets_openapi.yaml:
+    no-path-trailing-slash:
+        - "#/paths/~1OCR~1Model~1{model_id}~1LabelUrls~1"
+        - "#/paths/~1OCR~1Model~1{model_id}~1LabelFile~1"
