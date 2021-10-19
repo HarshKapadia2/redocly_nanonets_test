@@ -323,7 +323,7 @@ paths:
             requestBody:
                 description: The parameters to be sent in the request's body.
                 content:
-                    "application/form-data":
+                    "multipart/form-data":
                         schema:
                             type: object
                             required:
@@ -406,7 +406,7 @@ paths:
                   source: |
                       curl --request POST \
                           --url 'https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/UploadFile/' \
-                          --header 'accept: multipart/form-data' \
+                          --header 'Accept: multipart/form-data' \
                           -u '[[.ApiKey]]' \
                           -F 'data=[{"filename":"REPLACE_IMAGE_FILENAME.jpg", "object": [{"name":"category1", "ocr_text":"text inside the bounding box", "bndbox": {"xmin": 1,"ymin": 1,"xmax": 100, "ymax": 100}}]}]' \
                           -F 'file=@REPLACE_IMAGE_PATH.jpg'
@@ -498,8 +498,8 @@ paths:
                   source: |
                       var client = new RestClient("https://app.nanonets.com/api/v2/OCR/UploadFile/");
                       var request = new RestRequest(Method.POST);
-                      request.AddHeader("authorization", "Basic [[.ApiKey]]");
-                      request.AddHeader("accept", "Multipart/form-data");
+                      request.AddHeader("Authorization", "Basic [[.ApiKey]]");
+                      request.AddHeader("Accept", "multipart/form-data");
                       request.AddParameter("data", "[{\"filename\":\"REPLACE_IMAGE_FILENAME.jpg\", \"object\": [{\"name\":\"category1\", \"ocr_text\":\"text inside the bounding box\", \"bndbox\": {\"xmin\": 1,\"ymin\": 1,\"xmax\": 100, \"ymax\": 100}}]}]");
                       request.AddFile("file", "REPLACE_IMAGE_PATH.jpg");
                       IRestResponse response = client.Execute(request);"
@@ -865,7 +865,7 @@ paths:
                 - name: id
                   in: path
                   description: |
-                      The ID of the file for which the prediction has to be retrieved.
+                      The ID of the file for which the prediction has to be retrieved. It can be found in the response on uploading prediction files [synchronously](#operation/ocr/predict/file) or [asynchronously](#operation/ocr/predict/file/async) or while [retrieving all prediction file data](#operation/ocr/predict/getFile).
                       <br />
                       **Eg**: `0a0aa000-0000-0a0-aa00-000a0000000a`
                   required: true
@@ -1350,7 +1350,7 @@ paths:
                   source: |
                       curl --request POST \
                           --url 'https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelFile/' \
-                          --header 'accept: multipart/form-data' \
+                          --header 'Accept: multipart/form-data' \
                           -u '[[.ApiKey]]' \
                           -F 'file=@REPLACE_IMAGE_PATH.jpg'
                 - lang: Go
@@ -1439,8 +1439,8 @@ paths:
                   source: |
                       var client = new RestClient("https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelFile/");
                       var request = new RestRequest(Method.POST);
-                      request.AddHeader("authorization", "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes("[[.ApiKey]]:")));
-                      request.AddHeader("accept", "Multipart/form-data");
+                      request.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes("[[.ApiKey]]:")));
+                      request.AddHeader("Accept", "multipart/form-data");
                       request.AddFile("file", "REPLACE_IMAGE_PATH.jpg");
                       IRestResponse response = client.Execute(request);
                 - lang: Java
@@ -1531,7 +1531,7 @@ paths:
                   source: |
                       curl --request POST \
                           --url 'https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelFile/?async=true' \
-                          --header 'accept: multipart/form-data' \
+                          --header 'Accept: multipart/form-data' \
                           -u '[[.ApiKey]]' \
                           -F 'file=@REPLACE_IMAGE_PATH.jpg'
                 - lang: Go
@@ -1620,8 +1620,8 @@ paths:
                   source: |
                       var client = new RestClient("https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelFile/?async=true");
                       var request = new RestRequest(Method.POST);
-                      request.AddHeader("authorization", "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes("[[.ApiKey]]:")));
-                      request.AddHeader("accept", "Multipart/form-data");
+                      request.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes("[[.ApiKey]]:")));
+                      request.AddHeader("Accept", "multipart/form-data");
                       request.AddFile("file", "REPLACE_IMAGE_PATH.jpg");
                       IRestResponse response = client.Execute(request);
                 - lang: Java
@@ -2136,7 +2136,7 @@ paths:
             requestBody:
                 description: The parameters to be sent in the request's body.
                 content:
-                    "application/form-data":
+                    "multipart/form-data":
                         schema:
                             required:
                                 - modelId
@@ -2207,7 +2207,7 @@ paths:
                   source: |
                       curl --request POST \
                         --url 'https://app.nanonets.com/api/v2/ImageCategorization/UploadFile/' \
-                        --header 'accept: multipart/form-data' \
+                        --header 'Accept: multipart/form-data' \
                         -u '[[.ApiKey]]' \
                         -F 'category=category1' \
                         -F 'modelId=REPLACE_MODEL_ID' \
@@ -2305,10 +2305,10 @@ paths:
 
                       var request = new RestRequest(Method.POST);
 
-                      request.AddHeader("authorization", "Basic " +
+                      request.AddHeader("Authorization", "Basic " +
                       Convert.ToBase64String(Encoding.Default.GetBytes("[[.ApiKey]]:")));
 
-                      request.AddHeader("accept", "Multipart/form-data");
+                      request.AddHeader("Accept", "multipart/form-data");
 
                       request.AddParameter("modelId", "REPLACE_MODEL_ID");
 
@@ -2670,7 +2670,7 @@ paths:
             requestBody:
                 description: The parameters to be sent in the request's body.
                 content:
-                    "application/form-data":
+                    "multipart/form-data":
                         schema:
                             type: object
                             required:
@@ -2741,7 +2741,7 @@ paths:
                   source: |
                       curl --request POST \
                         --url 'https://app.nanonets.com/api/v2/ImageCategorization/LabelFile/' \
-                        --header 'accept: multipart/form-data' \
+                        --header 'Accept: multipart/form-data' \
                         -u '[[.ApiKey]]' \
                         -F 'modelId=REPLACE_MODEL_ID' \
                         -F 'file=@REPLACE_IMAGE_PATH.jpg'
@@ -2837,9 +2837,9 @@ paths:
 
                       var request = new RestRequest(Method.POST);
 
-                      request.AddHeader("authorization", "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes("[[.ApiKey]]:")));
+                      request.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes("[[.ApiKey]]:")));
 
-                      request.AddHeader("accept", "Multipart/form-data");
+                      request.AddHeader("Accept", "multipart/form-data");
 
                       request.AddParameter("modelId", "REPLACE_MODEL_ID");
 
@@ -2886,7 +2886,7 @@ components:
         urls:
             type: string
             description: |
-                Array of URL(s) of the training file(s).
+                Array of URLs of the training files.
                 <br />
                 **Format**: PNG, JPEG and/or PDF
         file:
@@ -3129,7 +3129,7 @@ components:
         file:
             description: The parameters to be sent in the request's body.
             content:
-                "application/form-data":
+                "multipart/form-data":
                     schema:
                         type: object
                         required:
@@ -3157,7 +3157,7 @@ components:
                             urls:
                                 type: string
                                 description: |
-                                    Array of URL(s) of the training file(s).
+                                    Array of URLs of the training files.
                                     <br />
                                     **Format**: PNG, JPEG and/or PDF
             required: true
@@ -3186,6 +3186,10 @@ components:
                 **NOTE**:
                 - All API requests must be made over HTTPS only. HTTP calls will fail.
                 - All API requests must have the `Authorization` header.
+                - All API requests from the browser will fail due to CORS policies.
+                - API Keys have full access to the user's account. **Please do not expose API Keys on the client.**
+                  - Please note that compiling, obfuscating, minifying or bundling (for example in React.js, Angular, Vue.js, React Native, etc.) **does not** hide the API Key and **it can still be extracted from the final application**.
+                  - The API Key should only be known to the server code and all client requests to the API must go through a server.
                 <br />
                 <br />
             scheme: basic
